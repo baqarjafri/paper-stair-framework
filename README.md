@@ -174,4 +174,4 @@ The Moodle source code (fetched by `scripts/fetch_moodle.*`) is the work of the 
 ## Contact
 
 Baqar Jafri — `baqar@nexgenclass.com`
-University of Stirling, School of Education (MSc AI in Education)
+University of Stirling, Computing Science and Mathematics (MSc in Artificial Intelligence)
