@@ -21,8 +21,17 @@ references_verified/
 # Figure sources (rendered PNGs ship in figures/)
 figures_src/
 
+# Title-page icon asset (used at build time; embedded into the PDF we ship;
+# not needed in the public repo since the docx/HTML builders are local-only)
+figures/github_icon.png
+
 # Vestigial figure-generation script (writes to ../task5/ from a parent layout)
 analysis/code/generate_figures.py
+
+# ==============================================================================
+# Audit reports (auto-generated log file with timestamps; local-only)
+# ==============================================================================
+docs/AUDIT_REPORT.md
 
 # ==============================================================================
 # Compiled paper artefacts (regenerable locally; never committed)

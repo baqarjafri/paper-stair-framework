@@ -1,0 +1,4267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAIR Methodology Explorer</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --surface: #f7f8fa;
+  --surface-alt: #eef1f6;
+  --ink: #1a2332;
+  --ink-soft: #475569;
+  --ink-faint: #94a3b8;
+  --border: #dde3ec;
+  --accent: #1a4b8c;
+  --green: #2d7a3e;
+  --green-soft: #e4f1e6;
+  --amber: #c98515;
+  --amber-soft: #fbf0d8;
+  --red: #b02a2a;
+  --red-soft: #f9e0e0;
+  --code-bg: #0f172a;
+  --code-ink: #e2e8f0;
+  --mono: 'JetBrains Mono', 'Consolas', 'Menlo', monospace;
+  --sans: -apple-system, 'Segoe UI', 'Inter', Arial, sans-serif;
+  --serif: Georgia, 'Times New Roman', serif;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--surface);
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--surface-alt);
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+header {
+  background: var(--ink);
+  color: white;
+  padding: 28px 40px 24px;
+  border-bottom: 1px solid var(--border);
+}
+header h1 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+header .subtitle {
+  color: #cbd5e1;
+  font-size: 14px;
+  line-height: 1.5;
+}
+header .meta {
+  margin-top: 12px;
+  color: #94a3b8;
+  font-size: 12px;
+  font-family: var(--mono);
+}
+
+nav.tabs {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex;
+  gap: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  overflow-x: auto;
+}
+nav.tabs button {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 16px 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--ink-soft);
+  font-weight: 500;
+  white-space: nowrap;
+}
+nav.tabs button:hover { color: var(--ink); }
+nav.tabs button.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 40px 80px;
+}
+.section { display: none; }
+.section.active { display: block; }
+
+h2.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+p.section-lede {
+  color: var(--ink-soft);
+  margin: 0 0 24px;
+  max-width: 68ch;
+}
+
+/* OVERVIEW */
+.pipeline {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  margin: 24px 0 32px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+.pipeline-step {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 18px;
+  flex: 1 1 0;
+  min-width: 160px;
+}
+.pipeline-step h3 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  font-family: var(--mono);
+}
+.pipeline-step p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+.pipeline-arrow {
+  align-self: center;
+  color: var(--ink-faint);
+  font-size: 20px;
+  user-select: none;
+}
+
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin: 24px 0;
+}
+.score-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 18px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.score-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.score-card .level-id {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin-bottom: 4px;
+}
+.score-card .level-name {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.score-card .score-big {
+  font-size: 28px;
+  font-weight: 700;
+  font-family: var(--mono);
+  letter-spacing: -0.02em;
+}
+.score-card .verdict {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+.score-card.green .score-big { color: var(--green); }
+.score-card.amber .score-big { color: var(--amber); }
+.score-card.red .score-big { color: var(--red); }
+
+.headline-finding {
+  background: var(--red-soft);
+  border: 1px solid var(--red);
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 24px 0;
+}
+.headline-finding strong { color: var(--red); }
+
+/* LEVEL DETAIL */
+.level-header {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+.level-header h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 600;
+}
+.level-header .big-score {
+  font-family: var(--mono);
+  font-size: 32px;
+  font-weight: 700;
+  margin: 8px 0;
+}
+.level-header.green .big-score { color: var(--green); }
+.level-header.amber .big-score { color: var(--amber); }
+.level-header.red .big-score { color: var(--red); }
+.level-header .grounding-pills {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.pill {
+  display: inline-block;
+  font-size: 11px;
+  font-family: var(--mono);
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--surface-alt);
+  color: var(--ink-soft);
+  letter-spacing: 0.03em;
+}
+.pill-z { background: #e0ebf7; color: #1a4b8c; }
+.pill-t { background: #f3e7f3; color: #6b2c6b; }
+.pill-h { background: #e0f2ec; color: #256d50; }
+
+.subdim-list {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.subdim {
+  border-bottom: 1px solid var(--border);
+  padding: 0;
+}
+.subdim:last-child { border-bottom: none; }
+.subdim-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  cursor: pointer;
+  user-select: none;
+  background: var(--bg);
+}
+.subdim-head:hover { background: var(--surface); }
+.subdim-head .chev {
+  color: var(--ink-faint);
+  font-family: var(--mono);
+  font-size: 12px;
+  width: 12px;
+  transition: transform 0.15s;
+}
+.subdim.open .chev { transform: rotate(90deg); }
+.subdim-head .sid {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-soft);
+  width: 56px;
+}
+.subdim-head .sname {
+  font-weight: 500;
+  flex: 1;
+}
+.subdim-head .sgrounds { display: flex; gap: 4px; }
+.subdim-head .sscore {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  width: 80px;
+  text-align: right;
+}
+.subdim-head .sscore.green { color: var(--green); }
+.subdim-head .sscore.amber { color: var(--amber); }
+.subdim-head .sscore.red { color: var(--red); }
+
+.subdim-body {
+  display: none;
+  padding: 0 20px 20px 88px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+.subdim.open .subdim-body { display: block; }
+
+.subdim-body h4 {
+  margin: 16px 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.subdim-body p { margin: 0 0 8px; font-size: 14px; line-height: 1.5; }
+.subdim-body .evidence {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  padding: 10px 14px;
+  border-radius: 4px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.consolidation {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.consolidation h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.consolidation .cells {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+.cons-cell {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 10px;
+  text-align: center;
+}
+.cons-cell .label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+.cons-cell .value {
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 600;
+}
+.cons-cell.green .value { color: var(--green); }
+.cons-cell.amber .value { color: var(--amber); }
+.cons-cell.red .value { color: var(--red); }
+.consolidation .calc {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-soft);
+  padding: 10px 14px;
+  background: var(--surface);
+  border-radius: 4px;
+  margin-top: 12px;
+}
+.consolidation .calc strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* CELL-BY-CELL DERIVATION (how each consolidated cell was computed) */
+.deriv-header {
+  margin: 20px 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.deriv-grid {
+  display: grid;
+  gap: 10px;
+}
+.deriv-cell {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px 16px;
+}
+.deriv-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.deriv-result {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 14px;
+}
+.deriv-result.green { color: var(--green); }
+.deriv-result.amber { color: var(--amber); }
+.deriv-result.red { color: var(--red); }
+.deriv-sources {
+  display: grid;
+  gap: 2px;
+  margin: 6px 0;
+}
+.deriv-src {
+  display: grid;
+  grid-template-columns: 44px 1fr 100px 60px;
+  gap: 10px;
+  font-size: 12.5px;
+  padding: 3px 0;
+  align-items: baseline;
+}
+.deriv-src .mono {
+  font-family: var(--mono);
+  color: var(--ink-soft);
+}
+.deriv-src .deriv-name {
+  color: var(--ink);
+}
+.deriv-src .weight {
+  font-family: var(--mono);
+  color: var(--accent);
+  text-align: right;
+}
+.deriv-formula {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  padding-top: 6px;
+  margin-top: 6px;
+  border-top: 1px dashed var(--border);
+}
+.deriv-formula strong {
+  color: var(--ink);
+}
+
+/* ARCHITECTURE */
+.arch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+.arch-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px 20px;
+}
+.arch-card h4 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.arch-card .count {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 4px 0;
+}
+.arch-card .path {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-top: 4px;
+}
+.arch-card ul { margin: 8px 0 0; padding-left: 18px; }
+.arch-card li { font-size: 13px; color: var(--ink-soft); font-family: var(--mono); }
+
+.isolation-banner {
+  background: var(--red-soft);
+  border-left: 4px solid var(--red);
+  padding: 16px 20px;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+.isolation-banner h4 {
+  margin: 0 0 6px;
+  color: var(--red);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.isolation-banner p { margin: 0; font-size: 14px; }
+
+/* EVENTS */
+.events-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.events-filters {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.events-filters label {
+  font-size: 13px;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.events-filters select, .events-filters input {
+  font-family: inherit;
+  font-size: 13px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--ink);
+}
+.events-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  font-size: 13px;
+}
+.events-table thead th {
+  background: var(--surface-alt);
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--border);
+}
+.events-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.events-table td.mono { font-family: var(--mono); font-size: 12px; }
+.events-table tr:last-child td { border-bottom: none; }
+.events-count {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+/* FILES */
+.files-list {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.file-row {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 20px;
+}
+.file-row:last-child { border-bottom: none; }
+.file-row .fname { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+.file-row .fdesc { font-size: 14px; color: var(--ink-soft); }
+.files-section-head {
+  background: var(--surface-alt);
+  padding: 10px 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 20px 40px;
+  color: var(--ink-faint);
+  font-size: 12px;
+  text-align: center;
+}
+footer code { background: var(--bg); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>STAIR Methodology Explorer</h1>
+  <div class="subtitle">
+    Interactive walkthrough of how Moodle's readiness scores (55 / 53 / 25 / 5 / 22) were derived.
+    Every number traces to a specific source file, class, or constant in the Moodle 5.2dev+ codebase.
+  </div>
+  <div class="meta">
+    Generated 2026-04-23 &middot; Data sources: sub_dimension_definitions.json, moodle_scores.json, scoring_provenance.json, architecture_summary.json, EVENTS_CATALOG.csv
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="overview">Overview</button>
+  <button class="tab-btn" data-tab="levels">The 5 Levels</button>
+  <button class="tab-btn" data-tab="architecture">Architecture Finding</button>
+  <button class="tab-btn" data-tab="events">Event Catalog</button>
+  <button class="tab-btn" data-tab="files">Code &amp; Data Files</button>
+</nav>
+
+<main>
+  <section id="sec-overview" class="section active">
+    <h2 class="section-title">How the scores come together</h2>
+    <p class="section-lede">
+      STAIR scores a learning management system on its architectural readiness to host an autonomous teaching agent.
+      The pipeline takes raw evidence from the Moodle source tree, scores 28 sub-dimensions on a 0&ndash;4 ordinal scale,
+      consolidates those scores into a 5&times;5 Table 3 matrix, and averages per level. Every step is shown below.
+    </p>
+
+    <div class="pipeline">
+      <div class="pipeline-step"><h3>STEP 1 · RUBRIC</h3><p>Formal instrument defines 28 sub-dimensions grounded in Zimmerman SRL, Talebirad-Nadiri multi-agent, and Chu educational LLM theory.</p></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step"><h3>STEP 2 · SCORE</h3><p>Each sub-dimension scored 0&ndash;4 with evidence from Moodle source (file paths, class names, constants).</p></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step"><h3>STEP 3 · CONSOLIDATE</h3><p>Raw 0&ndash;4 scores mapped to percentages and averaged into a 5&times;5 (level &times; dimension) matrix.</p></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step"><h3>STEP 4 · LEVEL AVG</h3><p>Each level's five consolidated cells averaged into the headline score.</p></div>
+    </div>
+
+    <h3 style="margin-top:32px;font-size:15px;color:var(--ink-soft);">Click a level to explore its sub-dimensions</h3>
+    <div class="score-grid" id="overview-grid"></div>
+
+    <div class="headline-finding">
+      <strong>Headline empirical finding:</strong> the 28-percentage-point cliff between L2 Student State (53%) and L3 Agent Reasoning (25%) is the paper's central result. Its mechanism: the AI subsystem and the analytics framework share zero code-level imports in Moodle's codebase. See the <a href="#" data-tab-jump="architecture">Architecture Finding</a> tab for the evidence.
+    </div>
+  </section>
+
+  <section id="sec-levels" class="section">
+    <h2 class="section-title">The 5 Levels &mdash; sub-dimensions, evidence, consolidation</h2>
+    <p class="section-lede">
+      Click a level tab below, then click each sub-dimension to expand its definition, theoretical grounding, evidence from Moodle source, and which consolidated dimension (COV / ACC / EDU / TMP / INT) it contributes to.
+    </p>
+    <div class="level-tabs" id="level-tabs"></div>
+    <div id="level-detail"></div>
+  </section>
+
+  <section id="sec-architecture" class="section">
+    <h2 class="section-title">The architectural finding behind the L2&rarr;L3 cliff</h2>
+    <p class="section-lede">
+      Moodle scores well at L1 and L2 (the data layers exist) but collapses at L3 Agent Reasoning. The mechanism is not a missing feature &mdash; it is a missing <em>connection</em>. The AI subsystem and the analytics framework live in parallel, with zero shared code.
+    </p>
+    <div id="architecture-body"></div>
+  </section>
+
+  <section id="sec-events" class="section">
+    <h2 class="section-title">Event Catalog &mdash; Moodle's 227 learning events</h2>
+    <p class="section-lede">
+      STAIR L1 Event Sensing scores 55% because Moodle emits a large, well-classified event stream. This table lists every event included in the analysis, its category, the learner action that triggers it, the SRL phase it supports, and the agent use case it enables.
+    </p>
+    <div id="events-body"></div>
+  </section>
+
+  <section id="sec-files" class="section">
+    <h2 class="section-title">Every code and data file behind the paper's numbers</h2>
+    <p class="section-lede">
+      All files referenced here are present in the reproduction repository and are reachable from the repo root.
+      The list is partitioned by role so a reader can navigate from a claim to the exact file that produces or documents it.
+    </p>
+    <div id="files-body"></div>
+  </section>
+</main>
+
+<footer>
+  STAIR Methodology Explorer &middot; generated from <code>scripts/build_methodology_explorer.py</code>.
+  Re-run the generator whenever <code>analysis/data/*.json</code> or the scoring instrument changes.
+</footer>
+
+<script id="data-json" type="application/json">
+{
+  "levels": [
+    {
+      "short": "L1",
+      "long": "L1_Event_Sensing",
+      "display_name": "Event Sensing",
+      "question": "Can the platform detect what a student is doing?",
+      "avg": 55,
+      "sub_dimensions": [
+        {
+          "id": "1.1_Event_Coverage",
+          "name": "Event Coverage",
+          "grounding": [
+            "Z",
+            "T"
+          ],
+          "definition": "Breadth and classification of platform events emitted when learners act. Measures the proportion of learning-relevant actions (clicks, submissions, navigation, participation) captured as structured events with sufficient metadata for external consumers to distinguish pedagogically significant actions from administrative noise.",
+          "score": 3,
+          "pct": 75,
+          "evidence": "228 core event classes with LEVEL_PARTICIPATING/TEACHING/OTHER classification in lib/classes/event/",
+          "contributes_to": "COV"
+        },
+        {
+          "id": "1.2_Observer_Subscription",
+          "name": "Observer Subscription",
+          "grounding": [
+            "T"
+          ],
+          "definition": "Whether external consumers can subscribe to the live event stream in real time, as opposed to receiving events only through daily database exports. Measures the presence and openness of observer/listener interfaces exposed to code outside the platform's core.",
+          "score": 2,
+          "pct": 50,
+          "evidence": "Internal observers via db/events.php, no external streaming API",
+          "contributes_to": "ACC"
+        },
+        {
+          "id": "1.3_SRL_Phase_Observability",
+          "name": "SRL Phase Observability",
+          "grounding": [
+            "Z"
+          ],
+          "definition": "Whether events carry pedagogical metadata that lets a consumer distinguish the self-regulated learning phase (forethought, performance, reflection) each event belongs to. Required for any system that aims to scaffold self-regulation rather than merely count actions.",
+          "score": 2,
+          "pct": 50,
+          "evidence": "Performance phase strong (quiz attempts, submissions), Forethought phase weak (no goal-setting events)",
+          "contributes_to": "EDU"
+        },
+        {
+          "id": "1.4_Real_Time_External_Access",
+          "name": "Real-Time External Access",
+          "grounding": [
+            "T"
+          ],
+          "definition": "Whether an external agent can consume events while the learner is still active, with latency low enough for in-flight scaffolding. Distinguishes live event access from batch exports that arrive hours or days after the learning activity.",
+          "score": 1,
+          "pct": 25,
+          "evidence": "Log store polling only via mdl_logstore_standard_log, no WebSocket/streaming",
+          "contributes_to": "TMP"
+        },
+        {
+          "id": "1.5_Event_Enrichment",
+          "name": "Event Enrichment",
+          "grounding": [
+            "Z",
+            "T"
+          ],
+          "definition": "Whether events carry enough context (actor identity, educational level, temporal position, activity metadata) for an external consumer to interpret them pedagogically without joining against multiple other tables.",
+          "score": 3,
+          "pct": 75,
+          "evidence": "Context hierarchy (system/course/module), other[] field, but no prior-state capture",
+          "contributes_to": "INT"
+        }
+      ]
+    },
+    {
+      "short": "L2",
+      "long": "L2_Student_State",
+      "display_name": "Student State",
+      "question": "Can it maintain the student's accumulated learning trajectory?",
+      "avg": 53,
+      "sub_dimensions": [
+        {
+          "id": "2.1_Raw_Data_Availability",
+          "name": "Raw Data Availability",
+          "grounding": [
+            "T"
+          ],
+          "definition": "Whether the raw event stream is retained and accessible for aggregation into learner state. A platform that logs events but flushes them daily fails this dimension even if its live event API is strong.",
+          "score": 3,
+          "pct": 75,
+          "evidence": "Grades, completion, competencies, event logs all queryable",
+          "contributes_to": "COV"
+        },
+        {
+          "id": "2.2_Analytics_Framework",
+          "name": "Analytics Framework",
+          "grounding": [
+            "T",
+            "H"
+          ],
+          "definition": "Whether a built-in analytics or prediction framework aggregates raw event data into learner-state signals such as risk scores, engagement indices, or progress trajectories. Measures the presence of machine-learning infrastructure as a platform primitive rather than an afterthought.",
+          "score": 3,
+          "pct": 75,
+          "evidence": "8 prediction targets, ML pipeline with Python backend, time-splitting strategies",
+          "contributes_to": "COV"
+        },
+        {
+          "id": "2.3_Unified_Learner_Model",
+          "name": "Unified Learner Model",
+          "grounding": [
+            "Z",
+            "T",
+            "H"
+          ],
+          "definition": "Whether a coherent, canonical learner model consolidates grades, progress, engagement, risk, and history into a single queryable object. A strong convergence point: all three theoretical frameworks name unified learner state as a requirement.",
+          "score": 1,
+          "pct": 25,
+          "evidence": "Data scattered across mdl_grade_grades, mdl_course_modules_completion, mdl_competency — no unified API",
+          "contributes_to": "EDU, INT"
+        },
+        {
+          "id": "2.4_API_Query_Capability",
+          "name": "API Query Capability",
+          "grounding": [
+            "T"
+          ],
+          "definition": "Whether an external agent can query learner state through a public API and receive structured responses. Distinguishes query access (external agents can read) from internal-only access (available only to code running inside the platform).",
+          "score": 3,
+          "pct": 75,
+          "evidence": "402 web service functions, token auth, REST/SOAP",
+          "contributes_to": "ACC"
+        },
+        {
+          "id": "2.5_Temporal_Analytics",
+          "name": "Temporal Analytics",
+          "grounding": [
+            "Z"
+          ],
+          "definition": "Whether learner state supports time-series queries (how has engagement changed over the last four weeks?) rather than only point-in-time snapshots. Required for self-reflection scaffolding, which depends on comparison across time.",
+          "score": 2,
+          "pct": 50,
+          "evidence": "Time-splitting strategies exist in analytics framework, no real-time session tracking",
+          "contributes_to": "TMP"
+        },
+        {
+          "id": "2.6_Privacy_Aware_Access",
+          "name": "Privacy-Aware Access",
+          "grounding": [
+            "H"
+          ],
+          "definition": "Whether learner state access is governed by consent and privacy policies expressible at the agent level. Measures whether an agent can be scoped to a subset of data via platform-enforced rules rather than relying on agent good behaviour.",
+          "score": 2,
+          "pct": 50,
+          "evidence": "Role-based access via capabilities system, no fine-grained agent consent model",
+          "contributes_to": "INT"
+        }
+      ]
+    },
+    {
+      "short": "L3",
+      "long": "L3_Agent_Reasoning",
+      "display_name": "Agent Reasoning",
+      "question": "Can an agent reason over that state within pedagogical constraints?",
+      "avg": 25,
+      "sub_dimensions": [
+        {
+          "id": "3.1_AI_Subsystem_Infrastructure",
+          "name": "AI Subsystem Infrastructure",
+          "grounding": [
+            "T",
+            "H"
+          ],
+          "definition": "Whether the platform provides a built-in AI subsystem (LLM provider abstraction, action types, provider plumbing) that an agent can operate through without each deployment reinventing the stack.",
+          "score": 2,
+          "pct": 50,
+          "evidence": "6 providers (openai, azureai, awsbedrock, gemini, deepseek, ollama), 4 action types, but user-initiated only",
+          "contributes_to": "COV"
+        },
+        {
+          "id": "3.2_Agent_Identity_Model",
+          "name": "Agent Identity Model",
+          "grounding": [
+            "T",
+            "H"
+          ],
+          "definition": "Whether the platform models agents as first-class identities with authentication, scopes, audit trails, and permission boundaries distinct from human users. Without this, agents masquerade as users and cannot be governed separately.",
+          "score": 0,
+          "pct": 0,
+          "evidence": "No agent role in capabilities system, no agent-specific permissions",
+          "contributes_to": "EDU"
+        },
+        {
+          "id": "3.3_Reasoning_Pipeline",
+          "name": "Reasoning Pipeline",
+          "grounding": [
+            "T",
+            "H"
+          ],
+          "definition": "Whether the platform provides a structured reasoning pipeline (prompt construction, tool calling, observation parsing, step iteration) that agents can use, rather than offering only one-shot text generation.",
+          "score": 0,
+          "pct": 0,
+          "evidence": "No planner, no goal-setting for agents, no reasoning chain",
+          "contributes_to": "EDU"
+        },
+        {
+          "id": "3.4_AI_Analytics_Bridge",
+          "name": "AI-Analytics Bridge",
+          "grounding": [
+            "Z",
+            "T",
+            "H"
+          ],
+          "definition": "Whether code-level connections exist between the AI subsystem and the analytics or learner-state framework, so that an agent can reason over learner state without each deployment writing a bespoke adapter. This is the paper's central empirical finding: Moodle scores 0 here because the two subsystems share zero imports.",
+          "score": 0,
+          "pct": 0,
+          "evidence": "Zero cross-imports between core_ai (ai/) and core_analytics (analytics/) — verified by grep",
+          "contributes_to": "INT"
+        },
+        {
+          "id": "3.5_Write_Back_Capability",
+          "name": "Write-Back Capability",
+          "grounding": [
+            "T"
+          ],
+          "definition": "Whether an agent can write decisions, interventions, or annotations back into the platform's persistent state, rather than only reading from it. Required for any agent that needs to act on its reasoning.",
+          "score": 2,
+          "pct": 50,
+          "evidence": "Web services exist for grades, messages, calendar but no agent-specific write API",
+          "contributes_to": "ACC"
+        },
+        {
+          "id": "3.6_SRL_Detection_Logic",
+          "name": "SRL Detection Logic",
+          "grounding": [
+            "Z",
+            "H"
+          ],
+          "definition": "Whether the platform or its AI subsystem includes built-in logic to detect self-regulated learning phase transitions, regulation failures, or scaffolding opportunities, rather than requiring each agent to reimplement SRL-aware reasoning from scratch.",
+          "score": 1,
+          "pct": 25,
+          "evidence": "Dropout prediction exists in analytics targets, no SRL phase detection",
+          "contributes_to": "TMP"
+        },
+        {
+          "id": "3.7_Contextual_Adaptation",
+          "name": "Contextual Adaptation",
+          "grounding": [
+            "Z",
+            "H"
+          ],
+          "definition": "Whether agent reasoning can be adapted to course, activity, and learner context automatically, through platform-supplied context rather than manual per-deployment configuration.",
+          "score": 1,
+          "pct": 25,
+          "evidence": "Placements (courseassist, editor) exist but no learner-context adaptation",
+          "contributes_to": "TMP"
+        }
+      ]
+    },
+    {
+      "short": "L4",
+      "long": "L4_Orchestration",
+      "display_name": "Orchestration",
+      "question": "Can multiple agents coordinate without conflict?",
+      "avg": 5,
+      "sub_dimensions": [
+        {
+          "id": "4.1_Agent_Registry",
+          "name": "Agent Registry",
+          "grounding": [
+            "T"
+          ],
+          "definition": "Whether multiple agents can register with the platform as discoverable entities, so that the platform (and other agents) know which agents are active and what capabilities each declares.",
+          "score": 0,
+          "pct": 0,
+          "evidence": "No multi-agent registry or agent discovery mechanism",
+          "contributes_to": "COV"
+        },
+        {
+          "id": "4.2_Shared_State_Store",
+          "name": "Shared State Store",
+          "grounding": [
+            "T"
+          ],
+          "definition": "Whether agents share a common workspace of state they all read and write with appropriate isolation. Required for multi-agent scenarios where one agent's observation must inform another's action.",
+          "score": 0,
+          "pct": 0,
+          "evidence": "No shared agent memory or coordination state",
+          "contributes_to": "ACC"
+        },
+        {
+          "id": "4.3_Coordination_Protocol",
+          "name": "Coordination Protocol",
+          "grounding": [
+            "T"
+          ],
+          "definition": "Whether a coordination protocol (message bus, supervisory agent, choreographed workflow) governs agent interaction, so that agents do not simply race against each other over learner attention.",
+          "score": 0,
+          "pct": 0,
+          "evidence": "No inter-agent communication protocol",
+          "contributes_to": "EDU, TMP"
+        },
+        {
+          "id": "4.4_Conflict_Resolution",
+          "name": "Conflict Resolution",
+          "grounding": [
+            "T",
+            "H"
+          ],
+          "definition": "Whether the platform arbitrates contradictory interventions from concurrent agents (e.g., one agent pushing a hint while another pushes a reflection prompt). Without this, agent interactions can harm rather than scaffold learning.",
+          "score": 0,
+          "pct": 0,
+          "evidence": "No priority or conflict management for competing agents",
+          "contributes_to": "EDU, TMP"
+        },
+        {
+          "id": "4.5_Scalability_Architecture",
+          "name": "Scalability Architecture",
+          "grounding": [
+            "T"
+          ],
+          "definition": "Whether the agent-coordination infrastructure scales to production workloads with concurrency control, queueing, and retry logic, rather than being a prototype that breaks under load.",
+          "score": 1,
+          "pct": 25,
+          "evidence": "Task system (scheduled + ad-hoc) can queue work but not agent-aware",
+          "contributes_to": "INT"
+        }
+      ]
+    },
+    {
+      "short": "L5",
+      "long": "L5_Intervention_Delivery",
+      "display_name": "Intervention Delivery",
+      "question": "Can agents deliver interventions back into the learning flow?",
+      "avg": 22,
+      "sub_dimensions": [
+        {
+          "id": "5.1_Message_Delivery",
+          "name": "Message Delivery",
+          "grounding": [
+            "H"
+          ],
+          "definition": "Whether agents can deliver messages to learners through platform-native channels (in-page notifications, messaging system, dashboard), reaching the learner inside the learning environment rather than via external email.",
+          "score": 2,
+          "pct": 50,
+          "evidence": "Messaging API and notification system exist, but no agent-specific channel",
+          "contributes_to": "COV"
+        },
+        {
+          "id": "5.2_UI_Injection",
+          "name": "UI Injection",
+          "grounding": [
+            "H"
+          ],
+          "definition": "Whether agents can inject UI components (hints, suggestions, inline feedback, widgets) into the learner's active view of a learning activity, rather than only speaking from a separate chat panel.",
+          "score": 1,
+          "pct": 25,
+          "evidence": "Output renderers, blocks, but no real-time content injection",
+          "contributes_to": "ACC"
+        },
+        {
+          "id": "5.3_Content_Generation",
+          "name": "Content Generation",
+          "grounding": [
+            "T",
+            "H"
+          ],
+          "definition": "Whether agents can generate and deliver adaptive content (follow-up questions, worked examples, scaffolds, alternative explanations) that the platform presents as first-class learning material.",
+          "score": 2,
+          "pct": 50,
+          "evidence": "AI generate_text/generate_image exist, not connected to intervention pipeline",
+          "contributes_to": "COV"
+        },
+        {
+          "id": "5.4_Feedback_Loop",
+          "name": "Feedback Loop",
+          "grounding": [
+            "Z",
+            "H"
+          ],
+          "definition": "Whether delivered interventions are observable back to the agent as events, so the agent learns whether its scaffolding worked. Closes the regulate-reflect-adjust cycle at the platform level.",
+          "score": 1,
+          "pct": 25,
+          "evidence": "Grade feedback exists, but no intervention tracking or outcome measurement",
+          "contributes_to": "EDU, INT"
+        },
+        {
+          "id": "5.5_Timing_Intelligence",
+          "name": "Timing Intelligence",
+          "grounding": [
+            "Z",
+            "H"
+          ],
+          "definition": "Whether agents can select pedagogically appropriate delivery moments (just-in-time scaffolding, not during peak cognitive load). Requires the platform to supply real-time learner-state context to the agent's timing logic.",
+          "score": 0,
+          "pct": 0,
+          "evidence": "No optimal-timing engine, no engagement-aware scheduling",
+          "contributes_to": "EDU, TMP"
+        }
+      ]
+    }
+  ],
+  "consolidation": {
+    "L1": {
+      "COV": {
+        "value": 75,
+        "sources": [
+          {
+            "id": "1.1_Event_Coverage",
+            "short_id": "1.1",
+            "name": "Event Coverage",
+            "raw": 3,
+            "pct": 75,
+            "weight": 1.0
+          }
+        ]
+      },
+      "ACC": {
+        "value": 50,
+        "sources": [
+          {
+            "id": "1.2_Observer_Subscription",
+            "short_id": "1.2",
+            "name": "Observer Subscription",
+            "raw": 2,
+            "pct": 50,
+            "weight": 1.0
+          }
+        ]
+      },
+      "EDU": {
+        "value": 50,
+        "sources": [
+          {
+            "id": "1.3_SRL_Phase_Observability",
+            "short_id": "1.3",
+            "name": "SRL Phase Observability",
+            "raw": 2,
+            "pct": 50,
+            "weight": 1.0
+          }
+        ]
+      },
+      "TMP": {
+        "value": 25,
+        "sources": [
+          {
+            "id": "1.4_Real_Time_External_Access",
+            "short_id": "1.4",
+            "name": "Real-Time External Access",
+            "raw": 1,
+            "pct": 25,
+            "weight": 1.0
+          }
+        ]
+      },
+      "INT": {
+        "value": 75,
+        "sources": [
+          {
+            "id": "1.5_Event_Enrichment",
+            "short_id": "1.5",
+            "name": "Event Enrichment",
+            "raw": 3,
+            "pct": 75,
+            "weight": 1.0
+          }
+        ]
+      }
+    },
+    "L2": {
+      "COV": {
+        "value": 75,
+        "sources": [
+          {
+            "id": "2.1_Raw_Data_Availability",
+            "short_id": "2.1",
+            "name": "Raw Data Availability",
+            "raw": 3,
+            "pct": 75,
+            "weight": 0.5
+          },
+          {
+            "id": "2.2_Analytics_Framework",
+            "short_id": "2.2",
+            "name": "Analytics Framework",
+            "raw": 3,
+            "pct": 75,
+            "weight": 0.5
+          }
+        ]
+      },
+      "ACC": {
+        "value": 75,
+        "sources": [
+          {
+            "id": "2.4_API_Query_Capability",
+            "short_id": "2.4",
+            "name": "API Query Capability",
+            "raw": 3,
+            "pct": 75,
+            "weight": 1.0
+          }
+        ]
+      },
+      "EDU": {
+        "value": 25,
+        "sources": [
+          {
+            "id": "2.3_Unified_Learner_Model",
+            "short_id": "2.3",
+            "name": "Unified Learner Model",
+            "raw": 1,
+            "pct": 25,
+            "weight": 1.0
+          }
+        ]
+      },
+      "TMP": {
+        "value": 50,
+        "sources": [
+          {
+            "id": "2.5_Temporal_Analytics",
+            "short_id": "2.5",
+            "name": "Temporal Analytics",
+            "raw": 2,
+            "pct": 50,
+            "weight": 1.0
+          }
+        ]
+      },
+      "INT": {
+        "value": 38,
+        "sources": [
+          {
+            "id": "2.6_Privacy_Aware_Access",
+            "short_id": "2.6",
+            "name": "Privacy-Aware Access",
+            "raw": 2,
+            "pct": 50,
+            "weight": 0.5
+          },
+          {
+            "id": "2.3_Unified_Learner_Model",
+            "short_id": "2.3",
+            "name": "Unified Learner Model",
+            "raw": 1,
+            "pct": 25,
+            "weight": 0.5
+          }
+        ]
+      }
+    },
+    "L3": {
+      "COV": {
+        "value": 50,
+        "sources": [
+          {
+            "id": "3.1_AI_Subsystem_Infrastructure",
+            "short_id": "3.1",
+            "name": "AI Subsystem Infrastructure",
+            "raw": 2,
+            "pct": 50,
+            "weight": 1.0
+          }
+        ]
+      },
+      "ACC": {
+        "value": 50,
+        "sources": [
+          {
+            "id": "3.5_Write_Back_Capability",
+            "short_id": "3.5",
+            "name": "Write-Back Capability",
+            "raw": 2,
+            "pct": 50,
+            "weight": 1.0
+          }
+        ]
+      },
+      "EDU": {
+        "value": 0,
+        "sources": [
+          {
+            "id": "3.2_Agent_Identity_Model",
+            "short_id": "3.2",
+            "name": "Agent Identity Model",
+            "raw": 0,
+            "pct": 0,
+            "weight": 0.5
+          },
+          {
+            "id": "3.3_Reasoning_Pipeline",
+            "short_id": "3.3",
+            "name": "Reasoning Pipeline",
+            "raw": 0,
+            "pct": 0,
+            "weight": 0.5
+          }
+        ]
+      },
+      "TMP": {
+        "value": 25,
+        "sources": [
+          {
+            "id": "3.6_SRL_Detection_Logic",
+            "short_id": "3.6",
+            "name": "SRL Detection Logic",
+            "raw": 1,
+            "pct": 25,
+            "weight": 0.5
+          },
+          {
+            "id": "3.7_Contextual_Adaptation",
+            "short_id": "3.7",
+            "name": "Contextual Adaptation",
+            "raw": 1,
+            "pct": 25,
+            "weight": 0.5
+          }
+        ]
+      },
+      "INT": {
+        "value": 0,
+        "sources": [
+          {
+            "id": "3.4_AI_Analytics_Bridge",
+            "short_id": "3.4",
+            "name": "AI-Analytics Bridge",
+            "raw": 0,
+            "pct": 0,
+            "weight": 1.0
+          }
+        ]
+      }
+    },
+    "L4": {
+      "COV": {
+        "value": 0,
+        "sources": [
+          {
+            "id": "4.1_Agent_Registry",
+            "short_id": "4.1",
+            "name": "Agent Registry",
+            "raw": 0,
+            "pct": 0,
+            "weight": 1.0
+          }
+        ]
+      },
+      "ACC": {
+        "value": 0,
+        "sources": [
+          {
+            "id": "4.2_Shared_State_Store",
+            "short_id": "4.2",
+            "name": "Shared State Store",
+            "raw": 0,
+            "pct": 0,
+            "weight": 1.0
+          }
+        ]
+      },
+      "EDU": {
+        "value": 0,
+        "sources": [
+          {
+            "id": "4.3_Coordination_Protocol",
+            "short_id": "4.3",
+            "name": "Coordination Protocol",
+            "raw": 0,
+            "pct": 0,
+            "weight": 0.5
+          },
+          {
+            "id": "4.4_Conflict_Resolution",
+            "short_id": "4.4",
+            "name": "Conflict Resolution",
+            "raw": 0,
+            "pct": 0,
+            "weight": 0.5
+          }
+        ]
+      },
+      "TMP": {
+        "value": 0,
+        "sources": [
+          {
+            "id": "4.3_Coordination_Protocol",
+            "short_id": "4.3",
+            "name": "Coordination Protocol",
+            "raw": 0,
+            "pct": 0,
+            "weight": 0.5
+          },
+          {
+            "id": "4.4_Conflict_Resolution",
+            "short_id": "4.4",
+            "name": "Conflict Resolution",
+            "raw": 0,
+            "pct": 0,
+            "weight": 0.5
+          }
+        ]
+      },
+      "INT": {
+        "value": 25,
+        "sources": [
+          {
+            "id": "4.5_Scalability_Architecture",
+            "short_id": "4.5",
+            "name": "Scalability Architecture",
+            "raw": 1,
+            "pct": 25,
+            "weight": 1.0
+          }
+        ]
+      }
+    },
+    "L5": {
+      "COV": {
+        "value": 50,
+        "sources": [
+          {
+            "id": "5.1_Message_Delivery",
+            "short_id": "5.1",
+            "name": "Message Delivery",
+            "raw": 2,
+            "pct": 50,
+            "weight": 0.5
+          },
+          {
+            "id": "5.3_Content_Generation",
+            "short_id": "5.3",
+            "name": "Content Generation",
+            "raw": 2,
+            "pct": 50,
+            "weight": 0.5
+          }
+        ]
+      },
+      "ACC": {
+        "value": 25,
+        "sources": [
+          {
+            "id": "5.2_UI_Injection",
+            "short_id": "5.2",
+            "name": "UI Injection",
+            "raw": 1,
+            "pct": 25,
+            "weight": 1.0
+          }
+        ]
+      },
+      "EDU": {
+        "value": 12,
+        "sources": [
+          {
+            "id": "5.4_Feedback_Loop",
+            "short_id": "5.4",
+            "name": "Feedback Loop",
+            "raw": 1,
+            "pct": 25,
+            "weight": 0.5
+          },
+          {
+            "id": "5.5_Timing_Intelligence",
+            "short_id": "5.5",
+            "name": "Timing Intelligence",
+            "raw": 0,
+            "pct": 0,
+            "weight": 0.5
+          }
+        ]
+      },
+      "TMP": {
+        "value": 0,
+        "sources": [
+          {
+            "id": "5.5_Timing_Intelligence",
+            "short_id": "5.5",
+            "name": "Timing Intelligence",
+            "raw": 0,
+            "pct": 0,
+            "weight": 1.0
+          }
+        ]
+      },
+      "INT": {
+        "value": 25,
+        "sources": [
+          {
+            "id": "5.4_Feedback_Loop",
+            "short_id": "5.4",
+            "name": "Feedback Loop",
+            "raw": 1,
+            "pct": 25,
+            "weight": 1.0
+          }
+        ]
+      }
+    }
+  },
+  "architecture": {
+    "moodle_source": "C:\\Users\\Ghulam\\ClaudeCodeProjects\\1st Paper\\moodle_src",
+    "web_services": {
+      "count": 402,
+      "file": "lib/db/services.php"
+    },
+    "ai_providers": {
+      "count": 6,
+      "providers": [
+        "awsbedrock",
+        "azureai",
+        "deepseek",
+        "gemini",
+        "ollama",
+        "openai"
+      ],
+      "path": "ai/provider/"
+    },
+    "ai_actions": {
+      "count": 4,
+      "actions": [
+        "explain_text",
+        "generate_image",
+        "generate_text",
+        "summarise_text"
+      ],
+      "path": "ai/classes/aiactions/"
+    },
+    "ai_analytics_isolation": {
+      "ai_references_analytics": 0,
+      "analytics_references_ai": 0,
+      "isolated": true,
+      "ai_files_with_refs": [],
+      "analytics_files_with_refs": []
+    },
+    "analytics_targets": {
+      "count": 8,
+      "targets": [
+        "course_competencies",
+        "course_completion",
+        "course_dropout",
+        "course_enrolments",
+        "course_gradetopass",
+        "no_access_since_course_start",
+        "no_recent_accesses",
+        "no_teaching"
+      ]
+    },
+    "scheduled_tasks": {
+      "count": 62,
+      "tasks": [
+        "analytics_cleanup_task",
+        "antivirus_cleanup_task",
+        "asynchronous_backup_task",
+        "asynchronous_copy_task",
+        "asynchronous_restore_task",
+        "automated_backup_report_task",
+        "automated_backup_task",
+        "backup_cleanup_task",
+        "badges_adhoc_task",
+        "badges_cron_task",
+        "badges_message_task",
+        "blog_cron_task",
+        "build_installed_themes_task",
+        "cache_cleanup_task",
+        "cache_cron_task",
+        "calendar_cron_task",
+        "calendar_fix_orphaned_events",
+        "check_for_updates_task",
+        "clean_up_deleted_search_area_task",
+        "complete_plans_task",
+        "completion_daily_task",
+        "completion_regular_task",
+        "context_cleanup_task",
+        "course_backup_task",
+        "create_contexts_task",
+        "database_logger",
+        "delete_incomplete_users_task",
+        "delete_unconfirmed_users_task",
+        "failed_task_callbacks",
+        "file_temp_cleanup_task",
+        "file_trash_cleanup_task",
+        "fix_file_timestamps_task",
+        "grade_cron_task",
+        "grade_history_cleanup_task",
+        "h5p_clean_orphaned_records_task",
+        "h5p_get_content_types_task",
+        "hide_ended_courses_task",
+        "logging_trait",
+        "logmanager",
+        "messaging_cleanup_task",
+        "password_reset_cleanup_task",
+        "plagiarism_cron_task",
+        "portfolio_cron_task",
+        "question_preview_cleanup_task",
+        "refresh_mod_calendar_events_task",
+        "registration_cron_task",
+        "search_index_task",
+        "search_optimize_task",
+        "send_failed_login_notifications_task",
+        "send_login_notifications",
+        "send_new_user_passwords_task",
+        "session_cleanup_task",
+        "show_started_courses_task",
+        "stats_cron_task",
+        "stored_progress_bar_cleanup_task",
+        "stored_progress_task_trait",
+        "sync_plans_from_template_cohorts_task",
+        "tag_cron_task",
+        "task_lock_cleanup_task",
+        "task_log_cleanup_task",
+        "task_logger",
+        "update_geoip2file_task"
+      ]
+    }
+  },
+  "events": [
+    {
+      "Event": "\\core\\event\\course_viewed",
+      "Category": "Course",
+      "Trigger": "Student opens course page",
+      "Key Payload Fields": "userid, courseid, other[coursesectionnumber]",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track engagement patterns; detect inactive students",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\core\\event\\course_completed",
+      "Category": "Course",
+      "Trigger": "All completion criteria met",
+      "Key Payload Fields": "relateduserid, courseid, objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Celebrate achievement; recommend next course",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\core\\event\\course_started",
+      "Category": "Course",
+      "Trigger": "Course start date reached",
+      "Key Payload Fields": "courseid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Send welcome/orientation nudge",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\course_ended",
+      "Category": "Course",
+      "Trigger": "Course end date reached",
+      "Key Payload Fields": "courseid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Prompt reflection activity",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\course_module_viewed",
+      "Category": "Course",
+      "Trigger": "Student views any activity",
+      "Key Payload Fields": "userid, contextinstanceid, courseid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track resource access sequence; time-on-task proxy",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\core\\event\\course_module_completion_updated",
+      "Category": "Course",
+      "Trigger": "Activity marked complete",
+      "Key Payload Fields": "relateduserid, contextinstanceid, other[completionstate]",
+      "SRL Phase": "Performance/Reflection",
+      "Agent Use Case": "Track progress; identify stalled students",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\core\\event\\course_completion_updated",
+      "Category": "Course",
+      "Trigger": "Completion criteria changed",
+      "Key Payload Fields": "courseid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Notify students of criteria changes",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\course_section_viewed",
+      "Category": "Course",
+      "Trigger": "Student views section",
+      "Key Payload Fields": "userid, courseid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track navigation patterns",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\course_information_viewed",
+      "Category": "Course",
+      "Trigger": "Student views course info",
+      "Key Payload Fields": "userid, courseid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Detect pre-enrollment interest",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\course_resources_list_viewed",
+      "Category": "Course",
+      "Trigger": "Student views resource list",
+      "Key Payload Fields": "userid, courseid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Detect resource seeking behavior",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\core\\event\\course_module_created",
+      "Category": "Course",
+      "Trigger": "Teacher adds activity",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\course_module_updated",
+      "Category": "Course",
+      "Trigger": "Teacher edits activity",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\course_module_deleted",
+      "Category": "Course",
+      "Trigger": "Teacher removes activity",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\course_created",
+      "Category": "Course",
+      "Trigger": "New course created",
+      "Key Payload Fields": "objectid, courseid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\course_updated",
+      "Category": "Course",
+      "Trigger": "Course settings changed",
+      "Key Payload Fields": "courseid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Detect structural changes",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\course_deleted",
+      "Category": "Course",
+      "Trigger": "Course deleted",
+      "Key Payload Fields": "courseid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\course_user_report_viewed",
+      "Category": "Course",
+      "Trigger": "Student views own report",
+      "Key Payload Fields": "userid, courseid, relateduserid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track self-monitoring behavior",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\course_backup_created",
+      "Category": "Course",
+      "Trigger": "Course backed up",
+      "Key Payload Fields": "courseid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\course_restored",
+      "Category": "Course",
+      "Trigger": "Course restored from backup",
+      "Key Payload Fields": "courseid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_started",
+      "Category": "Quiz",
+      "Trigger": "Student begins quiz",
+      "Key Payload Fields": "relateduserid, objectid, other[quizid]",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Detect start time; track attempt frequency",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_submitted",
+      "Category": "Quiz",
+      "Trigger": "Student submits quiz",
+      "Key Payload Fields": "relateduserid, objectid, other[submitterid, quizid, studentisonline]",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Analyze submission timing; auto-trigger feedback",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_viewed",
+      "Category": "Quiz",
+      "Trigger": "Student views attempt",
+      "Key Payload Fields": "relateduserid, objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Detect review behavior post-submission",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_reviewed",
+      "Category": "Quiz",
+      "Trigger": "Student reviews completed attempt",
+      "Key Payload Fields": "relateduserid, objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Confirm self-evaluation engagement",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_summary_viewed",
+      "Category": "Quiz",
+      "Trigger": "Student views attempt summary",
+      "Key Payload Fields": "relateduserid, objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Detect summary review before submission",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_abandoned",
+      "Category": "Quiz",
+      "Trigger": "Quiz attempt times out",
+      "Key Payload Fields": "relateduserid, objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Alert for time management issues",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_becameoverdue",
+      "Category": "Quiz",
+      "Trigger": "Attempt exceeds time limit",
+      "Key Payload Fields": "relateduserid, objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Flag time management problems",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_graded",
+      "Category": "Quiz",
+      "Trigger": "Attempt auto-graded",
+      "Key Payload Fields": "relateduserid, objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Trigger grade-based interventions",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_regraded",
+      "Category": "Quiz",
+      "Trigger": "Attempt regraded",
+      "Key Payload Fields": "relateduserid, objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Notify student of grade change",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_deleted",
+      "Category": "Quiz",
+      "Trigger": "Teacher deletes attempt",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit trail",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_reopened",
+      "Category": "Quiz",
+      "Trigger": "Teacher reopens attempt",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Notify student of retry opportunity",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_autosaved",
+      "Category": "Quiz",
+      "Trigger": "System auto-saves quiz",
+      "Key Payload Fields": "relateduserid, objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track in-progress engagement (heartbeat)",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_updated",
+      "Category": "Quiz",
+      "Trigger": "Attempt data updated",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track incremental progress",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_preview_started",
+      "Category": "Quiz",
+      "Trigger": "Teacher previews quiz",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_manual_grading_completed",
+      "Category": "Quiz",
+      "Trigger": "All manual grading done",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Notify students grades available",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\question_manually_graded",
+      "Category": "Quiz",
+      "Trigger": "Teacher grades essay question",
+      "Key Payload Fields": "objectid, other[]",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Deliver personalized feedback",
+      "STAIR Level": "L3"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\report_viewed",
+      "Category": "Quiz",
+      "Trigger": "Teacher views quiz report",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\quiz_grade_updated",
+      "Category": "Quiz",
+      "Trigger": "Quiz max grade changed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Notify of grading criteria change",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\edit_page_viewed",
+      "Category": "Quiz",
+      "Trigger": "Teacher edits quiz",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\user_override_created",
+      "Category": "Quiz",
+      "Trigger": "Individual override set",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Track accommodations",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\user_override_updated",
+      "Category": "Quiz",
+      "Trigger": "Individual override updated",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Track accommodations",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\user_override_deleted",
+      "Category": "Quiz",
+      "Trigger": "Individual override removed",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track accommodations",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\group_override_created",
+      "Category": "Quiz",
+      "Trigger": "Group override set",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Track group accommodations",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\group_override_updated",
+      "Category": "Quiz",
+      "Trigger": "Group override updated",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Track group accommodations",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\group_override_deleted",
+      "Category": "Quiz",
+      "Trigger": "Group override removed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\slot_created",
+      "Category": "Quiz",
+      "Trigger": "Question added to quiz",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\slot_deleted",
+      "Category": "Quiz",
+      "Trigger": "Question removed from quiz",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\slot_moved",
+      "Category": "Quiz",
+      "Trigger": "Question reordered in quiz",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_quiz\\event\\attempt_question_restarted",
+      "Category": "Quiz",
+      "Trigger": "Student restarts question in attempt",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track question-level struggle",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_assign\\event\\assessable_submitted",
+      "Category": "Assignment",
+      "Trigger": "Student submits assignment",
+      "Key Payload Fields": "userid, contextinstanceid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Detect submission timing vs deadline",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_assign\\event\\submission_created",
+      "Category": "Assignment",
+      "Trigger": "Submission record created",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track initial engagement",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\mod_assign\\event\\submission_updated",
+      "Category": "Assignment",
+      "Trigger": "Student edits submission",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Detect revision behavior (SRL indicator)",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_assign\\event\\submission_viewed",
+      "Category": "Assignment",
+      "Trigger": "Student views own submission",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Confirm review behavior",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_assign\\event\\submission_duplicated",
+      "Category": "Assignment",
+      "Trigger": "Student copies prior submission",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Detect reuse patterns",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_assign\\event\\submission_graded",
+      "Category": "Assignment",
+      "Trigger": "Teacher grades submission",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Trigger feedback delivery to student",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_assign\\event\\submission_locked",
+      "Category": "Assignment",
+      "Trigger": "Teacher locks submission",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_assign\\event\\submission_unlocked",
+      "Category": "Assignment",
+      "Trigger": "Teacher unlocks submission",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Notify student of resubmission opportunity",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_assign\\event\\submission_removed",
+      "Category": "Assignment",
+      "Trigger": "Submission removed",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track withdrawal behavior",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_assign\\event\\submission_status_updated",
+      "Category": "Assignment",
+      "Trigger": "Status change (draft->submitted)",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track submission workflow",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_assign\\event\\submission_status_viewed",
+      "Category": "Assignment",
+      "Trigger": "Teacher views submission status",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_assign\\event\\submission_form_viewed",
+      "Category": "Assignment",
+      "Trigger": "Student opens submission form",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Detect task engagement intent",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\mod_assign\\event\\submission_confirmation_form_viewed",
+      "Category": "Assignment",
+      "Trigger": "Student views confirmation page",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Detect pre-submit review",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_assign\\event\\feedback_viewed",
+      "Category": "Assignment",
+      "Trigger": "Student views teacher feedback",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Confirm feedback engagement",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_assign\\event\\grading_form_viewed",
+      "Category": "Assignment",
+      "Trigger": "Teacher opens grading form",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_assign\\event\\grading_table_viewed",
+      "Category": "Assignment",
+      "Trigger": "Teacher views grading table",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_assign\\event\\extension_granted",
+      "Category": "Assignment",
+      "Trigger": "Teacher grants deadline extension",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Track accommodation patterns",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_assign\\event\\workflow_state_updated",
+      "Category": "Assignment",
+      "Trigger": "Marking workflow state changes",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track grading pipeline",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_assign\\event\\marker_updated",
+      "Category": "Assignment",
+      "Trigger": "Grading marker assigned",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track grading workload",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_assign\\event\\statement_accepted",
+      "Category": "Assignment",
+      "Trigger": "Student accepts submission statement",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Confirm academic integrity acknowledgment",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_assign\\event\\all_submissions_downloaded",
+      "Category": "Assignment",
+      "Trigger": "Teacher downloads all submissions",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_assign\\event\\identities_revealed",
+      "Category": "Assignment",
+      "Trigger": "Blind marking identities shown",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_forum\\event\\course_module_viewed",
+      "Category": "Forum",
+      "Trigger": "Student views forum",
+      "Key Payload Fields": "userid, contextinstanceid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track forum engagement",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_forum\\event\\discussion_created",
+      "Category": "Forum",
+      "Trigger": "Student starts discussion",
+      "Key Payload Fields": "objectid, other[forumid, forumtype]",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Detect discussion initiation (leadership signal)",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_forum\\event\\discussion_viewed",
+      "Category": "Forum",
+      "Trigger": "Student views discussion",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track content consumption vs creation",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\mod_forum\\event\\discussion_deleted",
+      "Category": "Forum",
+      "Trigger": "Discussion removed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_forum\\event\\discussion_moved",
+      "Category": "Forum",
+      "Trigger": "Discussion moved to another forum",
+      "Key Payload Fields": "objectid, other[fromforumid, toforumid]",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_forum\\event\\discussion_updated",
+      "Category": "Forum",
+      "Trigger": "Discussion edited",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track refinement behavior",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_forum\\event\\discussion_pinned",
+      "Category": "Forum",
+      "Trigger": "Discussion pinned",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_forum\\event\\discussion_unpinned",
+      "Category": "Forum",
+      "Trigger": "Discussion unpinned",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_forum\\event\\discussion_lock_updated",
+      "Category": "Forum",
+      "Trigger": "Discussion locked/unlocked",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_forum\\event\\discussion_subscription_created",
+      "Category": "Forum",
+      "Trigger": "User subscribes to discussion",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Detect selective attention/interest",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_forum\\event\\discussion_subscription_deleted",
+      "Category": "Forum",
+      "Trigger": "User unsubscribes from discussion",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track disengagement",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_forum\\event\\post_created",
+      "Category": "Forum",
+      "Trigger": "Student creates forum post",
+      "Key Payload Fields": "objectid, other[discussionid, forumid, forumtype]",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Measure discourse contribution; analyze timing",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_forum\\event\\post_updated",
+      "Category": "Forum",
+      "Trigger": "Student edits post",
+      "Key Payload Fields": "objectid, other[discussionid, forumid, forumtype]",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Detect self-correction/refinement",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_forum\\event\\post_deleted",
+      "Category": "Forum",
+      "Trigger": "Post removed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_forum\\event\\subscription_created",
+      "Category": "Forum",
+      "Trigger": "User subscribes to forum",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Track engagement intent",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\mod_forum\\event\\subscription_deleted",
+      "Category": "Forum",
+      "Trigger": "User unsubscribes from forum",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track disengagement",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_forum\\event\\subscription_mode_updated",
+      "Category": "Forum",
+      "Trigger": "Forum subscription mode changed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_forum\\event\\readtracking_enabled",
+      "Category": "Forum",
+      "Trigger": "User enables read tracking",
+      "Key Payload Fields": "userid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Detect self-monitoring behavior",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_forum\\event\\readtracking_disabled",
+      "Category": "Forum",
+      "Trigger": "User disables read tracking",
+      "Key Payload Fields": "userid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Detect disengagement",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_forum\\event\\subscribers_viewed",
+      "Category": "Forum",
+      "Trigger": "Teacher views subscriber list",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_forum\\event\\assessable_uploaded",
+      "Category": "Forum",
+      "Trigger": "Student uploads to forum",
+      "Key Payload Fields": "userid, contextinstanceid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track multimedia contribution",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\mod_forum\\event\\course_searched",
+      "Category": "Forum",
+      "Trigger": "Student searches forum",
+      "Key Payload Fields": "userid, other[]",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Detect information-seeking behavior",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_forum\\event\\user_report_viewed",
+      "Category": "Forum",
+      "Trigger": "Teacher views user report",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\course_module_viewed",
+      "Category": "Workshop",
+      "Trigger": "Student views workshop",
+      "Key Payload Fields": "userid, contextinstanceid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track workshop engagement",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\submission_created",
+      "Category": "Workshop",
+      "Trigger": "Student submits work",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track submission timing",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\submission_updated",
+      "Category": "Workshop",
+      "Trigger": "Student edits submission",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Detect revision behavior",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\submission_deleted",
+      "Category": "Workshop",
+      "Trigger": "Submission removed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\submission_viewed",
+      "Category": "Workshop",
+      "Trigger": "Student views submission",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track peer work review",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\submission_assessed",
+      "Category": "Workshop",
+      "Trigger": "Peer assessment completed",
+      "Key Payload Fields": "objectid, relateduserid, other[submissionid, grade]",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Analyze peer feedback quality; assess critical thinking",
+      "STAIR Level": "L3"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\submission_reassessed",
+      "Category": "Workshop",
+      "Trigger": "Peer re-assesses submission",
+      "Key Payload Fields": "objectid, relateduserid, other[submissionid, grade]",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Detect reassessment/refinement of judgment",
+      "STAIR Level": "L3"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\assessment_evaluated",
+      "Category": "Workshop",
+      "Trigger": "System evaluates assessment quality",
+      "Key Payload Fields": "objectid, other[currentgrade, weight]",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Assess peer assessment reliability",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\assessment_reevaluated",
+      "Category": "Workshop",
+      "Trigger": "Assessment quality re-evaluated",
+      "Key Payload Fields": "objectid, other[currentgrade, weight]",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track calibration changes",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\assessment_evaluations_reset",
+      "Category": "Workshop",
+      "Trigger": "All evaluations reset",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\assessments_reset",
+      "Category": "Workshop",
+      "Trigger": "All assessments reset",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\phase_switched",
+      "Category": "Workshop",
+      "Trigger": "Workshop phase changes",
+      "Key Payload Fields": "objectid, other[workshopphase]",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Notify students of phase transition",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\phase_automatically_switched",
+      "Category": "Workshop",
+      "Trigger": "Auto phase switch",
+      "Key Payload Fields": "objectid, other[workshopphase]",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Trigger phase-appropriate guidance",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_workshop\\event\\assessable_uploaded",
+      "Category": "Workshop",
+      "Trigger": "Student uploads to workshop",
+      "Key Payload Fields": "userid, contextinstanceid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track file submission",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_lesson\\event\\lesson_started",
+      "Category": "Lesson",
+      "Trigger": "Student begins lesson",
+      "Key Payload Fields": "userid, objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track lesson engagement timing",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\mod_lesson\\event\\lesson_ended",
+      "Category": "Lesson",
+      "Trigger": "Student completes lesson",
+      "Key Payload Fields": "userid, objectid",
+      "SRL Phase": "Performance/Reflection",
+      "Agent Use Case": "Measure completion and duration",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_lesson\\event\\lesson_restarted",
+      "Category": "Lesson",
+      "Trigger": "Student restarts lesson",
+      "Key Payload Fields": "userid, objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Detect retry behavior (persistence)",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_lesson\\event\\lesson_resumed",
+      "Category": "Lesson",
+      "Trigger": "Student resumes lesson",
+      "Key Payload Fields": "userid, objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track return-to-task behavior",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_lesson\\event\\content_page_viewed",
+      "Category": "Lesson",
+      "Trigger": "Student views content page",
+      "Key Payload Fields": "userid, objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track navigation path through content",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\mod_lesson\\event\\question_viewed",
+      "Category": "Lesson",
+      "Trigger": "Student views question",
+      "Key Payload Fields": "userid, objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track question encounter",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_lesson\\event\\question_answered",
+      "Category": "Lesson",
+      "Trigger": "Student answers question",
+      "Key Payload Fields": "userid, objectid, other[]",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Analyze answer correctness and response time",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_lesson\\event\\essay_assessed",
+      "Category": "Lesson",
+      "Trigger": "Teacher grades essay",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Deliver qualitative feedback",
+      "STAIR Level": "L3"
+    },
+    {
+      "Event": "\\mod_lesson\\event\\essay_attempt_viewed",
+      "Category": "Lesson",
+      "Trigger": "Teacher views essay attempt",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_scorm\\event\\course_module_viewed",
+      "Category": "SCORM",
+      "Trigger": "Student views SCORM",
+      "Key Payload Fields": "userid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track SCORM access",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_scorm\\event\\sco_launched",
+      "Category": "SCORM",
+      "Trigger": "Student launches SCO",
+      "Key Payload Fields": "userid, objectid, other[loadedcontent]",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track which content objects accessed",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_scorm\\event\\scoreraw_submitted",
+      "Category": "SCORM",
+      "Trigger": "Score reported from SCORM",
+      "Key Payload Fields": "userid, other[attemptid, cmielement, cmivalue]",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Capture assessment scores from external content",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_scorm\\event\\status_submitted",
+      "Category": "SCORM",
+      "Trigger": "Status reported from SCORM",
+      "Key Payload Fields": "userid, other[attemptid, cmielement, cmivalue]",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track completion status",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_scorm\\event\\report_viewed",
+      "Category": "SCORM",
+      "Trigger": "Teacher views report",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_scorm\\event\\attempt_deleted",
+      "Category": "SCORM",
+      "Trigger": "Teacher deletes attempt",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\user_graded",
+      "Category": "Grade",
+      "Trigger": "Grade recorded/updated",
+      "Key Payload Fields": "relateduserid, other[itemid, overridden, finalgrade]",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Trigger grade notification; performance analysis",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\core\\event\\grade_deleted",
+      "Category": "Grade",
+      "Trigger": "Grade removed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\grade_item_created",
+      "Category": "Grade",
+      "Trigger": "New grade item added",
+      "Key Payload Fields": "objectid, courseid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Update student dashboards",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\grade_report_viewed",
+      "Category": "Grade",
+      "Trigger": "Student/teacher views grades",
+      "Key Payload Fields": "userid, courseid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Detect grade-checking frequency (anxiety/monitoring)",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\core\\event\\grade_exported",
+      "Category": "Grade",
+      "Trigger": "Teacher exports grades",
+      "Key Payload Fields": "userid, courseid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\user_loggedin",
+      "Category": "User",
+      "Trigger": "User authenticates",
+      "Key Payload Fields": "userid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track login frequency and session timing",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\core\\event\\user_loggedout",
+      "Category": "User",
+      "Trigger": "User logs out",
+      "Key Payload Fields": "userid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track session duration",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\user_loggedinas",
+      "Category": "User",
+      "Trigger": "Admin impersonates user",
+      "Key Payload Fields": "userid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\user_login_failed",
+      "Category": "User",
+      "Trigger": "Failed login",
+      "Key Payload Fields": "userid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Security",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\user_created",
+      "Category": "User",
+      "Trigger": "New user registered",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Trigger onboarding",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\user_updated",
+      "Category": "User",
+      "Trigger": "Profile updated",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\user_deleted",
+      "Category": "User",
+      "Trigger": "User removed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\user_enrolment_created",
+      "Category": "User",
+      "Trigger": "User enrolled in course",
+      "Key Payload Fields": "objectid, relateduserid, courseid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Trigger welcome message; set initial goals",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\user_enrolment_deleted",
+      "Category": "User",
+      "Trigger": "User unenrolled",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track dropout",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\core\\event\\user_enrolment_updated",
+      "Category": "User",
+      "Trigger": "Enrolment modified",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track status changes",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\user_profile_viewed",
+      "Category": "User",
+      "Trigger": "Profile page visited",
+      "Key Payload Fields": "relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track social awareness",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\user_list_viewed",
+      "Category": "User",
+      "Trigger": "User list accessed",
+      "Key Payload Fields": "courseid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track social navigation",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\competency_viewed",
+      "Category": "Competency",
+      "Trigger": "Competency page viewed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Track competency awareness",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\core\\event\\competency_user_competency_rated",
+      "Category": "Competency",
+      "Trigger": "Student competency rated",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Deliver competency-based feedback",
+      "STAIR Level": "L3"
+    },
+    {
+      "Event": "\\core\\event\\competency_user_competency_rated_in_course",
+      "Category": "Competency",
+      "Trigger": "Rated in course context",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Course-specific competency tracking",
+      "STAIR Level": "L3"
+    },
+    {
+      "Event": "\\core\\event\\competency_user_competency_viewed",
+      "Category": "Competency",
+      "Trigger": "Student views own competency",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Detect self-assessment behavior",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\core\\event\\competency_user_competency_viewed_in_course",
+      "Category": "Competency",
+      "Trigger": "Viewed in course",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Context-specific self-monitoring",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\core\\event\\competency_plan_created",
+      "Category": "Competency",
+      "Trigger": "Learning plan created",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Track goal-setting",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\core\\event\\competency_plan_approved",
+      "Category": "Competency",
+      "Trigger": "Learning plan approved",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Confirm plan acceptance",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\competency_plan_completed",
+      "Category": "Competency",
+      "Trigger": "Learning plan completed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track goal achievement",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\core\\event\\competency_plan_viewed",
+      "Category": "Competency",
+      "Trigger": "Student views learning plan",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Forethought/Reflection",
+      "Agent Use Case": "Track planning engagement",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\core\\event\\competency_evidence_created",
+      "Category": "Competency",
+      "Trigger": "Evidence of competency added",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track competency demonstration",
+      "STAIR Level": "L3"
+    },
+    {
+      "Event": "\\core\\event\\competency_framework_viewed",
+      "Category": "Competency",
+      "Trigger": "Framework viewed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Track awareness of learning objectives",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\message_sent",
+      "Category": "Messaging",
+      "Trigger": "User sends message",
+      "Key Payload Fields": "userid, relateduserid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track help-seeking behavior",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\core\\event\\message_viewed",
+      "Category": "Messaging",
+      "Trigger": "User reads message",
+      "Key Payload Fields": "userid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Confirm message delivery",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\message_deleted",
+      "Category": "Messaging",
+      "Trigger": "Message deleted",
+      "Key Payload Fields": "userid, objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\group_message_sent",
+      "Category": "Messaging",
+      "Trigger": "Group message sent",
+      "Key Payload Fields": "userid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track collaborative communication",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\message_contact_added",
+      "Category": "Messaging",
+      "Trigger": "Contact added",
+      "Key Payload Fields": "userid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track social network formation",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\message_contact_removed",
+      "Category": "Messaging",
+      "Trigger": "Contact removed",
+      "Key Payload Fields": "userid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track social network changes",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\notification_sent",
+      "Category": "Messaging",
+      "Trigger": "System notification sent",
+      "Key Payload Fields": "userid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track notification delivery",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\notification_viewed",
+      "Category": "Messaging",
+      "Trigger": "User reads notification",
+      "Key Payload Fields": "userid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Confirm notification engagement",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_bigbluebuttonbn\\event\\meeting_created",
+      "Category": "BigBlueButton",
+      "Trigger": "Meeting room created",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Notify students",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_bigbluebuttonbn\\event\\meeting_joined",
+      "Category": "BigBlueButton",
+      "Trigger": "Student joins meeting",
+      "Key Payload Fields": "userid, objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track synchronous attendance",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_bigbluebuttonbn\\event\\meeting_left",
+      "Category": "BigBlueButton",
+      "Trigger": "Student leaves meeting",
+      "Key Payload Fields": "userid, objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track session duration",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_bigbluebuttonbn\\event\\meeting_ended",
+      "Category": "BigBlueButton",
+      "Trigger": "Meeting ended",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Trigger post-meeting reflection",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_bigbluebuttonbn\\event\\live_session_event",
+      "Category": "BigBlueButton",
+      "Trigger": "In-session event",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track live engagement signals",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_bigbluebuttonbn\\event\\recording_viewed",
+      "Category": "BigBlueButton",
+      "Trigger": "Student views recording",
+      "Key Payload Fields": "userid, objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track async review of sync content",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_bigbluebuttonbn\\event\\recording_published",
+      "Category": "BigBlueButton",
+      "Trigger": "Recording made available",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Notify students",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_h5pactivity\\event\\statement_received",
+      "Category": "H5P Activity",
+      "Trigger": "xAPI statement from H5P",
+      "Key Payload Fields": "userid, objectid, other[]",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Process granular interaction data from H5P",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_h5pactivity\\event\\report_viewed",
+      "Category": "H5P Activity",
+      "Trigger": "Teacher views report",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_data\\event\\record_created",
+      "Category": "Database",
+      "Trigger": "Student creates record",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track data contribution",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_data\\event\\record_updated",
+      "Category": "Database",
+      "Trigger": "Student edits record",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track revision behavior",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_data\\event\\record_deleted",
+      "Category": "Database",
+      "Trigger": "Record removed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_glossary\\event\\entry_created",
+      "Category": "Glossary",
+      "Trigger": "Student adds entry",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track knowledge contribution",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_glossary\\event\\entry_updated",
+      "Category": "Glossary",
+      "Trigger": "Student edits entry",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track refinement",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_glossary\\event\\entry_viewed",
+      "Category": "Glossary",
+      "Trigger": "Student views entry",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track knowledge consumption",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_glossary\\event\\entry_approved",
+      "Category": "Glossary",
+      "Trigger": "Teacher approves entry",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Notify student",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_glossary\\event\\entry_disapproved",
+      "Category": "Glossary",
+      "Trigger": "Teacher disapproves entry",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Notify student; suggest revision",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_wiki\\event\\page_created",
+      "Category": "Wiki",
+      "Trigger": "Student creates page",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track collaborative creation",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_wiki\\event\\page_updated",
+      "Category": "Wiki",
+      "Trigger": "Student edits page",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance/Reflection",
+      "Agent Use Case": "Track collaborative revision",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_wiki\\event\\page_viewed",
+      "Category": "Wiki",
+      "Trigger": "Student views page",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track knowledge access",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_wiki\\event\\page_version_viewed",
+      "Category": "Wiki",
+      "Trigger": "Student views page version",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track version comparison (metacognition)",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_wiki\\event\\page_diff_viewed",
+      "Category": "Wiki",
+      "Trigger": "Student views diff between versions",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track change awareness",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_wiki\\event\\page_history_viewed",
+      "Category": "Wiki",
+      "Trigger": "Student views edit history",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track metacognitive history review",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_wiki\\event\\page_map_viewed",
+      "Category": "Wiki",
+      "Trigger": "Student views page map",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Track structural understanding",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_wiki\\event\\page_deleted",
+      "Category": "Wiki",
+      "Trigger": "Page deleted",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_wiki\\event\\page_version_deleted",
+      "Category": "Wiki",
+      "Trigger": "Version deleted",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_wiki\\event\\page_version_restored",
+      "Category": "Wiki",
+      "Trigger": "Version restored",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track version management",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_wiki\\event\\page_locks_deleted",
+      "Category": "Wiki",
+      "Trigger": "Page locks cleared",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\badge_awarded",
+      "Category": "Badge",
+      "Trigger": "Badge earned by student",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Celebrate achievement; recommend next badge",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\core\\event\\badge_viewed",
+      "Category": "Badge",
+      "Trigger": "Student views badge",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track achievement awareness",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\badge_listing_viewed",
+      "Category": "Badge",
+      "Trigger": "Student views badge gallery",
+      "Key Payload Fields": "userid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Track goal awareness",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\badge_revoked",
+      "Category": "Badge",
+      "Trigger": "Badge removed from user",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Notify student",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\mod_book\\event\\chapter_viewed",
+      "Category": "Book",
+      "Trigger": "Student reads chapter",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track reading progress",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\mod_book\\event\\chapter_created",
+      "Category": "Book",
+      "Trigger": "Teacher creates chapter",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_book\\event\\chapter_updated",
+      "Category": "Book",
+      "Trigger": "Teacher edits chapter",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_book\\event\\chapter_deleted",
+      "Category": "Book",
+      "Trigger": "Teacher deletes chapter",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_choice\\event\\answer_created",
+      "Category": "Choice",
+      "Trigger": "Student makes choice",
+      "Key Payload Fields": "objectid, other[choiceid, optionid]",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track decision-making",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\mod_choice\\event\\answer_updated",
+      "Category": "Choice",
+      "Trigger": "Student changes choice",
+      "Key Payload Fields": "objectid, other[choiceid, optionid]",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track decision revision",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\mod_choice\\event\\answer_deleted",
+      "Category": "Choice",
+      "Trigger": "Choice answer deleted",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_choice\\event\\report_viewed",
+      "Category": "Choice",
+      "Trigger": "Teacher views results",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_feedback\\event\\response_submitted",
+      "Category": "Feedback",
+      "Trigger": "Student submits feedback",
+      "Key Payload Fields": "objectid, relateduserid, other[anonymous]",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Analyze course feedback for improvement",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\mod_feedback\\event\\response_deleted",
+      "Category": "Feedback",
+      "Trigger": "Response removed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\mod_folder\\event\\all_files_downloaded",
+      "Category": "Folder",
+      "Trigger": "All folder files downloaded",
+      "Key Payload Fields": "userid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track bulk download (preparation)",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\mod_folder\\event\\folder_updated",
+      "Category": "Folder",
+      "Trigger": "Folder contents changed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\calendar_event_created",
+      "Category": "Calendar",
+      "Trigger": "Calendar event created",
+      "Key Payload Fields": "objectid, userid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Detect study planning behavior",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\calendar_event_updated",
+      "Category": "Calendar",
+      "Trigger": "Calendar event modified",
+      "Key Payload Fields": "objectid, userid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Track planning adjustments",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\calendar_event_deleted",
+      "Category": "Calendar",
+      "Trigger": "Calendar event removed",
+      "Key Payload Fields": "objectid, userid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\blog_entry_created",
+      "Category": "Blog",
+      "Trigger": "Blog entry created",
+      "Key Payload Fields": "objectid, userid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Detect reflective journaling",
+      "STAIR Level": "L2-L3"
+    },
+    {
+      "Event": "\\core\\event\\blog_entry_updated",
+      "Category": "Blog",
+      "Trigger": "Blog entry edited",
+      "Key Payload Fields": "objectid, userid",
+      "SRL Phase": "Reflection",
+      "Agent Use Case": "Track reflection refinement",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\blog_entry_deleted",
+      "Category": "Blog",
+      "Trigger": "Blog entry removed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\comment_created",
+      "Category": "Comment",
+      "Trigger": "Comment posted on content",
+      "Key Payload Fields": "objectid, userid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track engagement with content",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\core\\event\\comment_deleted",
+      "Category": "Comment",
+      "Trigger": "Comment removed",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\note_created",
+      "Category": "Note",
+      "Trigger": "Teacher creates note about student",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "At-risk identification data",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\note_updated",
+      "Category": "Note",
+      "Trigger": "Teacher edits note",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "At-risk tracking",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\note_deleted",
+      "Category": "Note",
+      "Trigger": "Teacher deletes note",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Audit",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\group_member_added",
+      "Category": "Group",
+      "Trigger": "Student added to group",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track group formation",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\group_member_removed",
+      "Category": "Group",
+      "Trigger": "Student removed from group",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track group changes",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\group_created",
+      "Category": "Group",
+      "Trigger": "New group created",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\tag_added",
+      "Category": "Tag",
+      "Trigger": "Tag added to content",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track knowledge organization",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\tag_removed",
+      "Category": "Tag",
+      "Trigger": "Tag removed from content",
+      "Key Payload Fields": "objectid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "N/A",
+      "STAIR Level": "L0"
+    },
+    {
+      "Event": "\\core\\event\\search_results_viewed",
+      "Category": "Search",
+      "Trigger": "Search results viewed",
+      "Key Payload Fields": "userid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track information-seeking behavior",
+      "STAIR Level": "L2"
+    },
+    {
+      "Event": "\\core\\event\\recent_activity_viewed",
+      "Category": "Activity",
+      "Trigger": "Recent activity page viewed",
+      "Key Payload Fields": "userid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track engagement monitoring",
+      "STAIR Level": "L1-L2"
+    },
+    {
+      "Event": "\\core\\event\\dashboard_viewed",
+      "Category": "Dashboard",
+      "Trigger": "User views dashboard",
+      "Key Payload Fields": "userid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track platform engagement",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\mycourses_viewed",
+      "Category": "Dashboard",
+      "Trigger": "User views my courses",
+      "Key Payload Fields": "userid",
+      "SRL Phase": "Forethought",
+      "Agent Use Case": "Track course overview engagement",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\section_viewed",
+      "Category": "Course",
+      "Trigger": "Section accessed",
+      "Key Payload Fields": "userid, courseid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track content navigation",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\role_assigned",
+      "Category": "Role",
+      "Trigger": "Role assigned to user",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track responsibility changes",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\role_unassigned",
+      "Category": "Role",
+      "Trigger": "Role removed from user",
+      "Key Payload Fields": "objectid, relateduserid",
+      "SRL Phase": "N/A",
+      "Agent Use Case": "Track responsibility changes",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\contentbank_content_viewed",
+      "Category": "Content Bank",
+      "Trigger": "Content bank item viewed",
+      "Key Payload Fields": "userid, objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track content engagement",
+      "STAIR Level": "L1"
+    },
+    {
+      "Event": "\\core\\event\\h5p_viewed",
+      "Category": "H5P",
+      "Trigger": "H5P content viewed",
+      "Key Payload Fields": "userid, objectid",
+      "SRL Phase": "Performance",
+      "Agent Use Case": "Track interactive content access",
+      "STAIR Level": "L1-L2"
+    }
+  ],
+  "grounding_codes": {
+    "Z": "Zimmerman (2002) -- Self-Regulated Learning",
+    "T": "Talebirad and Nadiri (2023) -- Multi-agent collaboration architecture",
+    "H": "Chu et al. (2025, EMNLP) -- LLM agents for education"
+  },
+  "rubric_scale": {
+    "0": "Absent (0%) -- no infrastructure; capability does not exist",
+    "1": "Nascent (25%) -- primitive building blocks; major development required",
+    "2": "Partial (50%) -- half-built; significant gaps remain",
+    "3": "Substantial (75%) -- most of the capability present; targeted gaps",
+    "4": "Ready (100%) -- production-ready for the assessed capability"
+  },
+  "paper_claims": [
+    {
+      "id": "L1_readiness",
+      "section": "§5 Results (Table 3)",
+      "claim": "L1 Event Sensing readiness = 55%",
+      "source": "derive_table3.py",
+      "data_file": "analysis/data/moodle_scores.json",
+      "output_key": "table3.L1.avg",
+      "expected": 55,
+      "tolerance": 0
+    },
+    {
+      "id": "L2_readiness",
+      "section": "§5 Results (Table 3)",
+      "claim": "L2 Student State readiness = 53%",
+      "source": "derive_table3.py",
+      "data_file": "analysis/data/moodle_scores.json",
+      "output_key": "table3.L2.avg",
+      "expected": 53,
+      "tolerance": 0
+    },
+    {
+      "id": "L3_readiness",
+      "section": "§5 Results (Table 3)",
+      "claim": "L3 Agent Reasoning readiness = 25%",
+      "source": "derive_table3.py",
+      "data_file": "analysis/data/moodle_scores.json",
+      "output_key": "table3.L3.avg",
+      "expected": 25,
+      "tolerance": 0
+    },
+    {
+      "id": "L4_readiness",
+      "section": "§5 Results (Table 3)",
+      "claim": "L4 Orchestration readiness = 5%",
+      "source": "derive_table3.py",
+      "data_file": "analysis/data/moodle_scores.json",
+      "output_key": "table3.L4.avg",
+      "expected": 5,
+      "tolerance": 0
+    },
+    {
+      "id": "L5_readiness",
+      "section": "§5 Results (Table 3)",
+      "claim": "L5 Intervention Delivery readiness = 22%",
+      "source": "derive_table3.py",
+      "data_file": "analysis/data/moodle_scores.json",
+      "output_key": "table3.L5.avg",
+      "expected": 22,
+      "tolerance": 0
+    },
+    {
+      "id": "L2_to_L3_cliff",
+      "section": "§5 Results, Abstract, Fig 1 teaser",
+      "claim": "28-point cliff between L2 (53%) and L3 (25%)",
+      "source": "derived: table3.L2.avg - table3.L3.avg",
+      "data_file": "analysis/data/moodle_scores.json",
+      "output_key": "table3.L2.avg - table3.L3.avg",
+      "expected": 28,
+      "tolerance": 0
+    },
+    {
+      "id": "ai_analytics_isolated",
+      "section": "§5 Results (central finding)",
+      "claim": "Zero cross-imports between core_ai and core_analytics",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/ai/, moodle_src/analytics/",
+      "output_key": "ai_analytics_isolation.isolated",
+      "expected": true,
+      "tolerance": 0
+    },
+    {
+      "id": "ai_refs_analytics_count",
+      "section": "§5 Results",
+      "claim": "core_ai references to core_analytics = 0",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/ai/",
+      "output_key": "ai_analytics_isolation.ai_references_analytics",
+      "expected": 0,
+      "tolerance": 0
+    },
+    {
+      "id": "analytics_refs_ai_count",
+      "section": "§5 Results",
+      "claim": "core_analytics references to core_ai = 0",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/analytics/",
+      "output_key": "ai_analytics_isolation.analytics_references_ai",
+      "expected": 0,
+      "tolerance": 0
+    },
+    {
+      "id": "web_services_count",
+      "section": "§5 Results",
+      "claim": "402 web service functions",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/lib/db/services.php",
+      "output_key": "web_services.count",
+      "expected": 402,
+      "tolerance": 5
+    },
+    {
+      "id": "ai_providers_count",
+      "section": "§5 Results",
+      "claim": "6 AI providers",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/ai/provider/",
+      "output_key": "ai_providers.count",
+      "expected": 6,
+      "tolerance": 0
+    },
+    {
+      "id": "ai_actions_count",
+      "section": "§5 Results",
+      "claim": "4 AI action types",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/ai/classes/aiactions/",
+      "output_key": "ai_actions.count",
+      "expected": 4,
+      "tolerance": 0
+    },
+    {
+      "id": "analytics_targets_count",
+      "section": "§5 Results",
+      "claim": "8 analytics prediction targets",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/course/classes/analytics/target/",
+      "output_key": "analytics_targets.count",
+      "expected": 8,
+      "tolerance": 2
+    }
+  ],
+  "files": {
+    "Analysis code (reproduces the paper's numbers)": [
+      {
+        "path": "analysis/code/derive_table3.py",
+        "desc": "Canonical script. Maps 28 raw sub-dim scores into Table 3 (5×5 consolidated matrix) and averages each row. This is what produces 55/53/25/5/22."
+      },
+      {
+        "path": "analysis/code/score_stair.py",
+        "desc": "Secondary: raw arithmetic mean of sub-dim scores, plus 3-way weighting sensitivity analysis. Not the paper's reported numbers."
+      },
+      {
+        "path": "analysis/code/analyze_architecture.py",
+        "desc": "Scans Moodle source for web services, AI providers, analytics targets, and the AI↔analytics cross-import count (the paper's headline finding)."
+      },
+      {
+        "path": "analysis/code/analyze_events.py",
+        "desc": "Enumerates Moodle's 227+ event classes and categorises them by module, CRUD type, and education level."
+      },
+      {
+        "path": "analysis/code/verify_claims.py",
+        "desc": "Trust anchor: walks paper_claims.json and prints a PASS/FAIL table of every paper claim against reproduced values."
+      },
+      {
+        "path": "analysis/code/paths.py",
+        "desc": "Central path resolver used by all analysis scripts."
+      }
+    ],
+    "Data (authoritative inputs)": [
+      {
+        "path": "analysis/data/sub_dimension_definitions.json",
+        "desc": "Canonical definitions for the 28 sub-dimensions, with Z/T/H theoretical grounding codes and rubric scale."
+      },
+      {
+        "path": "analysis/data/moodle_scores.json",
+        "desc": "Per-sub-dimension raw 0-4 scores with one-line evidence strings (file paths, class names, constants)."
+      },
+      {
+        "path": "analysis/data/scoring_provenance.json",
+        "desc": "Maps each Table 3 cell to its source sub-dimensions, shows derivation and evidence for all 25 consolidated cells."
+      },
+      {
+        "path": "analysis/data/table3_derived.json",
+        "desc": "Computed output of derive_table3.py. Contains the 5×5 matrix and per-level averages."
+      },
+      {
+        "path": "analysis/data/architecture_summary.json",
+        "desc": "Computed output of analyze_architecture.py. Web service count (402), AI providers, AI actions, analytics targets, AI↔analytics isolation finding (0)."
+      },
+      {
+        "path": "analysis/data/EVENTS_CATALOG.csv",
+        "desc": "227 Moodle events with category, trigger, key payload fields, SRL phase, agent use case, and STAIR level mapping."
+      },
+      {
+        "path": "analysis/data/paper_claims.json",
+        "desc": "Machine-readable manifest of every quantitative claim in the paper with expected value, tolerance, source script, and data source."
+      }
+    ],
+    "Instruments and documentation": [
+      {
+        "path": "analysis/instruments/STAIR_SCORING_INSTRUMENT.md",
+        "desc": "Formal scoring rubric. Establishes the 0-4 ordinal scale, evidence criteria, minimum-threshold rule, and theoretical grounding framework."
+      },
+      {
+        "path": "docs/CLAIMS_MAP.md",
+        "desc": "Per-claim provenance map: every number in the paper → the producing script and data file."
+      },
+      {
+        "path": "docs/REPRODUCE.md",
+        "desc": "Plain-prose reproduction guide for non-technical readers."
+      },
+      {
+        "path": "docs/SCORING_METHODOLOGY.md",
+        "desc": "Reader-friendly explainer of the rubric, the consolidation mapping, and the raw vs consolidated distinction."
+      },
+      {
+        "path": "docs/MOODLE_PINNED_COMMIT.md",
+        "desc": "Pinned Moodle commit SHA and verify commands."
+      }
+    ],
+    "Reproduction harness": [
+      {
+        "path": "reproduce.py",
+        "desc": "One-command entry point. Verifies environment, fetches pinned Moodle commit, runs analysis, verifies claims. Exit 0 iff every claim reproduces."
+      },
+      {
+        "path": "scripts/fetch_moodle.sh",
+        "desc": "Bash script to clone Moodle at the pinned SHA."
+      },
+      {
+        "path": "scripts/fetch_moodle.ps1",
+        "desc": "PowerShell equivalent for Windows."
+      },
+      {
+        "path": "scripts/verify_environment.py",
+        "desc": "Checks Python version, required packages, and git availability."
+      },
+      {
+        "path": "scripts/build_methodology_explorer.py",
+        "desc": "Regenerates this explorer from the data files. Re-run whenever data changes."
+      }
+    ]
+  }
+}
+</script>
+
+<script>
+'use strict';
+
+const DATA = JSON.parse(document.getElementById('data-json').textContent);
+
+function band(pct) {
+  if (pct >= 40) return 'green';
+  if (pct >= 20) return 'amber';
+  return 'red';
+}
+function verdict(pct) {
+  if (pct >= 81) return 'Ready';
+  if (pct >= 61) return 'Substantially Ready';
+  if (pct >= 31) return 'Partially Ready';
+  if (pct >= 11) return 'Nascent';
+  return 'Absent';
+}
+
+// --- TAB SWITCHING ---
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => activateTab(btn.dataset.tab));
+});
+document.querySelectorAll('[data-tab-jump]').forEach(el => {
+  el.addEventListener('click', e => { e.preventDefault(); activateTab(el.dataset.tabJump); });
+});
+function activateTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === 'sec-' + name));
+  window.scrollTo(0, 0);
+}
+
+// --- OVERVIEW GRID ---
+(function renderOverview() {
+  const grid = document.getElementById('overview-grid');
+  DATA.levels.forEach(lv => {
+    const pct = lv.avg;
+    const b = band(pct);
+    const card = document.createElement('div');
+    card.className = 'score-card ' + b;
+    card.innerHTML = `
+      <div class="level-id">${lv.short}</div>
+      <div class="level-name">${lv.display_name}</div>
+      <div class="score-big">${pct}%</div>
+      <div class="verdict">${verdict(pct)}</div>
+    `;
+    card.addEventListener('click', () => {
+      activateTab('levels');
+      selectLevel(lv.short);
+    });
+    grid.appendChild(card);
+  });
+})();
+
+// --- LEVEL TABS + DETAIL ---
+const levelTabsEl = document.getElementById('level-tabs');
+const levelDetailEl = document.getElementById('level-detail');
+let currentLevel = DATA.levels[0].short;
+
+(function renderLevelTabs() {
+  levelTabsEl.className = 'pipeline';
+  DATA.levels.forEach(lv => {
+    const btn = document.createElement('div');
+    btn.className = 'score-card ' + band(lv.avg);
+    btn.style.cursor = 'pointer';
+    btn.innerHTML = `
+      <div class="level-id">${lv.short}</div>
+      <div class="level-name">${lv.display_name}</div>
+      <div class="score-big">${lv.avg}%</div>
+    `;
+    btn.addEventListener('click', () => selectLevel(lv.short));
+    btn.dataset.lv = lv.short;
+    levelTabsEl.appendChild(btn);
+  });
+})();
+
+function selectLevel(short) {
+  currentLevel = short;
+  document.querySelectorAll('#level-tabs .score-card').forEach(c => {
+    c.style.outline = c.dataset.lv === short ? '3px solid var(--accent)' : 'none';
+  });
+  renderLevelDetail(short);
+}
+
+function renderLevelDetail(short) {
+  const lv = DATA.levels.find(l => l.short === short);
+  if (!lv) return;
+  const b = band(lv.avg);
+  const groundingSet = new Set();
+  lv.sub_dimensions.forEach(sd => sd.grounding.forEach(g => groundingSet.add(g)));
+  const gPills = Array.from(groundingSet).map(g =>
+    `<span class="pill pill-${g.toLowerCase()}">${g} &middot; ${DATA.grounding_codes[g]}</span>`
+  ).join('');
+
+  const subdimRows = lv.sub_dimensions.map(sd => {
+    const sb = band(sd.pct);
+    const gp = sd.grounding.map(g => `<span class="pill pill-${g.toLowerCase()}">${g}</span>`).join('');
+    const rubricRows = Object.entries(DATA.rubric_scale).map(([k, v]) => {
+      const mark = parseInt(k) === sd.score ? '&#9679;' : '&#9675;';
+      const em = parseInt(k) === sd.score ? 'style="font-weight:700;color:var(--accent);"' : '';
+      return `<div ${em}>${mark} <strong>${k}</strong> &mdash; ${v}</div>`;
+    }).join('');
+
+    return `
+      <div class="subdim" data-sid="${sd.id}">
+        <div class="subdim-head">
+          <span class="chev">&#9656;</span>
+          <span class="sid">${sd.id.split('_')[0]}</span>
+          <span class="sname">${sd.name}</span>
+          <span class="sgrounds">${gp}</span>
+          <span class="sscore ${sb}">${sd.score}/4 &middot; ${sd.pct}%</span>
+        </div>
+        <div class="subdim-body">
+          <h4>Definition</h4>
+          <p>${sd.definition}</p>
+          <h4>Rubric scale (highlighted = Moodle's score)</h4>
+          <div style="font-size:13.5px;line-height:1.7;">${rubricRows}</div>
+          <h4>Evidence from Moodle source</h4>
+          <div class="evidence">${sd.evidence || '(no evidence string recorded)'}</div>
+          <h4>Contributes to consolidated dimension</h4>
+          <p><span class="pill">${sd.contributes_to || '(mapping not found)'}</span> within ${short}</p>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Consolidation cells for this level
+  const cons = DATA.consolidation[short] || {};
+  const consOrder = ['COV', 'ACC', 'EDU', 'TMP', 'INT'];
+  const getVal = d => (cons[d] && cons[d].value != null) ? cons[d].value : 0;
+  const consCells = consOrder.map(dim => {
+    const v = getVal(dim);
+    const cb = band(v);
+    return `<div class="cons-cell ${cb}"><div class="label">${dim}</div><div class="value">${v}</div></div>`;
+  }).join('');
+  const consSum = consOrder.reduce((a, d) => a + getVal(d), 0);
+  const consAvg = Math.round(consSum / consOrder.length);
+
+  // Cell-by-cell derivation: how each of the 5 consolidated cells was computed
+  // from its contributing sub-dimensions and their weights.
+  const derivRows = consOrder.map(dim => {
+    const c = cons[dim] || { value: 0, sources: [] };
+    const cb = band(c.value);
+    const srcRows = (c.sources || []).map(s => `
+      <div class="deriv-src">
+        <span class="mono">${s.short_id}</span>
+        <span class="deriv-name">${s.name}</span>
+        <span class="mono">${s.raw}/4 = ${s.pct}%</span>
+        <span class="weight">× ${s.weight.toFixed(1)}</span>
+      </div>`).join('');
+    let formula;
+    if (c.sources && c.sources.length > 0) {
+      const numerTerms = c.sources.map(s => `${s.pct}×${s.weight.toFixed(1)}`).join(' + ');
+      const denom = c.sources.reduce((a, s) => a + s.weight, 0);
+      formula = `= (${numerTerms}) / ${denom.toFixed(1)} = <strong>${c.value}%</strong>`;
+    } else {
+      formula = '<em>(no sources mapped)</em>';
+    }
+    return `
+      <div class="deriv-cell">
+        <div class="deriv-head">
+          <span class="pill">${dim}</span>
+          <span class="deriv-result ${cb}">= ${c.value}%</span>
+        </div>
+        <div class="deriv-sources">${srcRows}</div>
+        <div class="deriv-formula">${formula}</div>
+      </div>`;
+  }).join('');
+
+  levelDetailEl.innerHTML = `
+    <div class="level-header ${b}">
+      <h3>${lv.short}: ${lv.display_name}</h3>
+      <p style="margin:0;color:var(--ink-soft);">${lv.question}</p>
+      <div class="big-score">${lv.avg}% &mdash; ${verdict(lv.avg)}</div>
+      <div class="grounding-pills">${gPills}</div>
+    </div>
+    <div class="subdim-list">${subdimRows}</div>
+    <div class="consolidation">
+      <h3>Consolidation of ${lv.short} sub-dimensions into Table 3 row</h3>
+      <p style="margin:0 0 10px;color:var(--ink-soft);font-size:13.5px;">
+        Each raw 0&ndash;4 score converts to the percentage rubric (0 / 25 / 50 / 75 / 100) and maps into one or two consolidated dimensions. The per-dimension cells below are the weighted mean of the mapped sub-dimensions, which then average into the level score.
+      </p>
+      <div class="cells">${consCells}</div>
+      <div class="calc">
+        <strong>${lv.short} average</strong> = (${consOrder.map(d => getVal(d)).join(' + ')}) / 5
+        = ${consSum} / 5 = <strong>${consAvg}%</strong>
+      </div>
+
+      <div class="deriv-header">Cell-by-cell derivation</div>
+      <div class="deriv-grid">${derivRows}</div>
+    </div>
+  `;
+
+  levelDetailEl.querySelectorAll('.subdim-head').forEach(h => {
+    h.addEventListener('click', () => h.parentElement.classList.toggle('open'));
+  });
+}
+
+selectLevel(DATA.levels[0].short);
+
+// --- ARCHITECTURE FINDING ---
+(function renderArchitecture() {
+  const a = DATA.architecture;
+  const iso = a.ai_analytics_isolation || {};
+  document.getElementById('architecture-body').innerHTML = `
+    <div class="isolation-banner">
+      <h4>Zero cross-imports: the L2 &rarr; L3 cliff mechanism</h4>
+      <p>
+        A code-level scan of Moodle's <code>ai/</code> and <code>analytics/</code> subsystems produced
+        <strong>${iso.ai_references_analytics}</strong> references from <code>ai/</code> to <code>core_analytics</code>
+        and <strong>${iso.analytics_references_ai}</strong> references from <code>analytics/</code> to <code>core_ai</code>.
+        Both directories exist, both contain substantial infrastructure, and neither imports from the other. That is the architectural reason the L3 cliff shows up in Moodle.
+      </p>
+    </div>
+
+    <div class="arch-grid">
+      <div class="arch-card">
+        <h4>Web Service Functions</h4>
+        <div class="count">${a.web_services.count}</div>
+        <div class="path">${a.web_services.file}</div>
+      </div>
+      <div class="arch-card">
+        <h4>AI Providers</h4>
+        <div class="count">${a.ai_providers.count}</div>
+        <ul>${(a.ai_providers.providers || []).map(p => `<li>${p}</li>`).join('')}</ul>
+        <div class="path">${a.ai_providers.path}</div>
+      </div>
+      <div class="arch-card">
+        <h4>AI Action Types</h4>
+        <div class="count">${a.ai_actions.count}</div>
+        <ul>${(a.ai_actions.actions || []).map(p => `<li>${p}</li>`).join('')}</ul>
+        <div class="path">${a.ai_actions.path}</div>
+      </div>
+      <div class="arch-card">
+        <h4>Analytics Prediction Targets</h4>
+        <div class="count">${a.analytics_targets.count}</div>
+        <ul>${((a.analytics_targets.targets) || []).slice(0,8).map(p => `<li>${p}</li>`).join('')}</ul>
+      </div>
+      <div class="arch-card">
+        <h4>Scheduled Tasks</h4>
+        <div class="count">${a.scheduled_tasks.count}</div>
+      </div>
+      <div class="arch-card" style="background:var(--red-soft);border-color:var(--red);">
+        <h4>AI &harr; Analytics Imports</h4>
+        <div class="count" style="color:var(--red);">0</div>
+        <div class="path">The finding this paper is built on</div>
+      </div>
+    </div>
+  `;
+})();
+
+// --- EVENT CATALOG ---
+(function renderEvents() {
+  const events = DATA.events;
+  const body = document.getElementById('events-body');
+  if (!events || events.length === 0) {
+    body.innerHTML = '<p style="color:var(--ink-soft);">Event catalog is empty.</p>';
+    return;
+  }
+
+  // Summary counts
+  const byCat = {};
+  const bySRL = {};
+  const byLevel = {};
+  events.forEach(e => {
+    byCat[e.Category] = (byCat[e.Category] || 0) + 1;
+    bySRL[e['SRL Phase']] = (bySRL[e['SRL Phase']] || 0) + 1;
+    byLevel[e['STAIR Level']] = (byLevel[e['STAIR Level']] || 0) + 1;
+  });
+
+  const summaryCards = [
+    {h: 'Total events', c: events.length, path: '227 rows in EVENTS_CATALOG.csv'},
+    {h: 'Categories', c: Object.keys(byCat).length, path: 'Course, User, Assignment, Quiz, ...'},
+    {h: 'SRL phases covered', c: Object.keys(bySRL).length, path: 'Forethought, Performance, Reflection'},
+    {h: 'STAIR levels involved', c: Object.keys(byLevel).length, path: 'L1 primary; L2-L5 downstream'},
+  ];
+
+  const cats = Object.keys(byCat).sort();
+  const srls = Object.keys(bySRL).sort();
+
+  body.innerHTML = `
+    <div class="events-summary">
+      ${summaryCards.map(s => `
+        <div class="arch-card">
+          <h4>${s.h}</h4>
+          <div class="count">${s.c}</div>
+          <div class="path">${s.path}</div>
+        </div>`).join('')}
+    </div>
+    <div class="events-filters">
+      <label>Category:
+        <select id="evt-cat">
+          <option value="">all (${events.length})</option>
+          ${cats.map(c => `<option value="${c}">${c} (${byCat[c]})</option>`).join('')}
+        </select>
+      </label>
+      <label>SRL phase:
+        <select id="evt-srl">
+          <option value="">all</option>
+          ${srls.map(s => `<option value="${s}">${s} (${bySRL[s]})</option>`).join('')}
+        </select>
+      </label>
+      <label>Search: <input type="text" id="evt-search" placeholder="event name or trigger..."></label>
+    </div>
+    <div class="events-count" id="evt-count"></div>
+    <table class="events-table"><thead><tr>
+      <th>Event</th><th>Category</th><th>Trigger</th><th>SRL Phase</th><th>Agent Use Case</th><th>STAIR Level</th>
+    </tr></thead><tbody id="evt-tbody"></tbody></table>
+  `;
+
+  function applyFilters() {
+    const cat = document.getElementById('evt-cat').value;
+    const srl = document.getElementById('evt-srl').value;
+    const q = document.getElementById('evt-search').value.toLowerCase();
+    const rows = events.filter(e =>
+      (!cat || e.Category === cat) &&
+      (!srl || e['SRL Phase'] === srl) &&
+      (!q || (e.Event + ' ' + e.Trigger + ' ' + e['Agent Use Case']).toLowerCase().includes(q))
+    );
+    document.getElementById('evt-count').textContent = rows.length + ' event(s) match';
+    document.getElementById('evt-tbody').innerHTML = rows.slice(0, 200).map(r => `
+      <tr>
+        <td class="mono">${r.Event}</td>
+        <td>${r.Category}</td>
+        <td>${r.Trigger}</td>
+        <td>${r['SRL Phase']}</td>
+        <td>${r['Agent Use Case']}</td>
+        <td>${r['STAIR Level']}</td>
+      </tr>`).join('') + (rows.length > 200 ? '<tr><td colspan="6" style="text-align:center;color:var(--ink-faint);font-style:italic;">+ ' + (rows.length-200) + ' more (filter to narrow)</td></tr>' : '');
+  }
+  ['evt-cat', 'evt-srl', 'evt-search'].forEach(id => {
+    document.getElementById(id).addEventListener('input', applyFilters);
+  });
+  applyFilters();
+})();
+
+// --- FILES ---
+(function renderFiles() {
+  const groups = DATA.files;
+  document.getElementById('files-body').innerHTML = `
+    <div class="files-list">
+      ${Object.entries(groups).map(([group, items]) => `
+        <div class="files-section-head">${group}</div>
+        ${items.map(f => `
+          <div class="file-row">
+            <div class="fname">${f.path}</div>
+            <div class="fdesc">${f.desc}</div>
+          </div>`).join('')}
+      `).join('')}
+    </div>
+  `;
+})();
+</script>
+</body>
+</html>

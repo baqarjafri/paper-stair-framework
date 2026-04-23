@@ -86,6 +86,12 @@ Every quantitative claim the paper makes is backed by a producing script and a d
 
 ---
 
+## Interactive methodology explorer
+
+A self-contained HTML walkthrough of the full scoring methodology lives at [`docs/methodology_explorer.html`](docs/methodology_explorer.html). Open it in any browser to navigate the five STAIR levels, click into each sub-dimension to see its definition, theoretical grounding, raw 0-4 score, the source-code evidence behind that score, and how every cell of Table 3 was derived. It also carries the architecture finding (zero AI-analytics cross-imports) and a searchable browser of Moodle's 227 learning events. Works offline, no dependencies, no build step. Regenerated from the data files by `scripts/build_methodology_explorer.py`.
+
+---
+
 ## Paper PDF
 
 Open [`paper/Paper_1_STAIR_AITHE2026.pdf`](paper/Paper_1_STAIR_AITHE2026.pdf) to read the paper without running anything. GitHub renders PDFs inline in the browser.

@@ -1,0 +1,193 @@
+{
+  "_meta": {
+    "description": "Canonical definitions for the 28 STAIR sub-dimensions. Paired with moodle_scores.json (raw 0-4 scores + evidence) and scoring_provenance.json (consolidation to Table 3) to provide complete transparency on how each paper-reported number was derived.",
+    "source_instrument": "analysis/instruments/STAIR_SCORING_INSTRUMENT.md",
+    "grounding_codes": {
+      "Z": "Zimmerman (2002) -- Self-Regulated Learning",
+      "T": "Talebirad and Nadiri (2023) -- Multi-agent collaboration architecture",
+      "H": "Chu et al. (2025, EMNLP) -- LLM agents for education"
+    },
+    "rubric_scale": {
+      "0": "Absent (0%) -- no infrastructure; capability does not exist",
+      "1": "Nascent (25%) -- primitive building blocks; major development required",
+      "2": "Partial (50%) -- half-built; significant gaps remain",
+      "3": "Substantial (75%) -- most of the capability present; targeted gaps",
+      "4": "Ready (100%) -- production-ready for the assessed capability"
+    },
+    "minimum_threshold_rule": "If any sub-dimension within a level scores 0 (Absent), the level verdict is capped at 'Partially Ready' regardless of the arithmetic average. This prevents a few very-strong sub-dimensions from masking a critical missing capability."
+  },
+  "sub_dimensions": {
+    "1.1_Event_Coverage": {
+      "name": "Event Coverage",
+      "level": "L1",
+      "grounding": ["Z", "T"],
+      "definition": "Breadth and classification of platform events emitted when learners act. Measures the proportion of learning-relevant actions (clicks, submissions, navigation, participation) captured as structured events with sufficient metadata for external consumers to distinguish pedagogically significant actions from administrative noise."
+    },
+    "1.2_Observer_Subscription": {
+      "name": "Observer Subscription",
+      "level": "L1",
+      "grounding": ["T"],
+      "definition": "Whether external consumers can subscribe to the live event stream in real time, as opposed to receiving events only through daily database exports. Measures the presence and openness of observer/listener interfaces exposed to code outside the platform's core."
+    },
+    "1.3_SRL_Phase_Observability": {
+      "name": "SRL Phase Observability",
+      "level": "L1",
+      "grounding": ["Z"],
+      "definition": "Whether events carry pedagogical metadata that lets a consumer distinguish the self-regulated learning phase (forethought, performance, reflection) each event belongs to. Required for any system that aims to scaffold self-regulation rather than merely count actions."
+    },
+    "1.4_Real_Time_External_Access": {
+      "name": "Real-Time External Access",
+      "level": "L1",
+      "grounding": ["T"],
+      "definition": "Whether an external agent can consume events while the learner is still active, with latency low enough for in-flight scaffolding. Distinguishes live event access from batch exports that arrive hours or days after the learning activity."
+    },
+    "1.5_Event_Enrichment": {
+      "name": "Event Enrichment",
+      "level": "L1",
+      "grounding": ["Z", "T"],
+      "definition": "Whether events carry enough context (actor identity, educational level, temporal position, activity metadata) for an external consumer to interpret them pedagogically without joining against multiple other tables."
+    },
+
+    "2.1_Raw_Data_Availability": {
+      "name": "Raw Data Availability",
+      "level": "L2",
+      "grounding": ["T"],
+      "definition": "Whether the raw event stream is retained and accessible for aggregation into learner state. A platform that logs events but flushes them daily fails this dimension even if its live event API is strong."
+    },
+    "2.2_Analytics_Framework": {
+      "name": "Analytics Framework",
+      "level": "L2",
+      "grounding": ["T", "H"],
+      "definition": "Whether a built-in analytics or prediction framework aggregates raw event data into learner-state signals such as risk scores, engagement indices, or progress trajectories. Measures the presence of machine-learning infrastructure as a platform primitive rather than an afterthought."
+    },
+    "2.3_Unified_Learner_Model": {
+      "name": "Unified Learner Model",
+      "level": "L2",
+      "grounding": ["Z", "T", "H"],
+      "definition": "Whether a coherent, canonical learner model consolidates grades, progress, engagement, risk, and history into a single queryable object. A strong convergence point: all three theoretical frameworks name unified learner state as a requirement."
+    },
+    "2.4_API_Query_Capability": {
+      "name": "API Query Capability",
+      "level": "L2",
+      "grounding": ["T"],
+      "definition": "Whether an external agent can query learner state through a public API and receive structured responses. Distinguishes query access (external agents can read) from internal-only access (available only to code running inside the platform)."
+    },
+    "2.5_Temporal_Analytics": {
+      "name": "Temporal Analytics",
+      "level": "L2",
+      "grounding": ["Z"],
+      "definition": "Whether learner state supports time-series queries (how has engagement changed over the last four weeks?) rather than only point-in-time snapshots. Required for self-reflection scaffolding, which depends on comparison across time."
+    },
+    "2.6_Privacy_Aware_Access": {
+      "name": "Privacy-Aware Access",
+      "level": "L2",
+      "grounding": ["H"],
+      "definition": "Whether learner state access is governed by consent and privacy policies expressible at the agent level. Measures whether an agent can be scoped to a subset of data via platform-enforced rules rather than relying on agent good behaviour."
+    },
+
+    "3.1_AI_Subsystem_Infrastructure": {
+      "name": "AI Subsystem Infrastructure",
+      "level": "L3",
+      "grounding": ["T", "H"],
+      "definition": "Whether the platform provides a built-in AI subsystem (LLM provider abstraction, action types, provider plumbing) that an agent can operate through without each deployment reinventing the stack."
+    },
+    "3.2_Agent_Identity_Model": {
+      "name": "Agent Identity Model",
+      "level": "L3",
+      "grounding": ["T", "H"],
+      "definition": "Whether the platform models agents as first-class identities with authentication, scopes, audit trails, and permission boundaries distinct from human users. Without this, agents masquerade as users and cannot be governed separately."
+    },
+    "3.3_Reasoning_Pipeline": {
+      "name": "Reasoning Pipeline",
+      "level": "L3",
+      "grounding": ["T", "H"],
+      "definition": "Whether the platform provides a structured reasoning pipeline (prompt construction, tool calling, observation parsing, step iteration) that agents can use, rather than offering only one-shot text generation."
+    },
+    "3.4_AI_Analytics_Bridge": {
+      "name": "AI-Analytics Bridge",
+      "level": "L3",
+      "grounding": ["Z", "T", "H"],
+      "definition": "Whether code-level connections exist between the AI subsystem and the analytics or learner-state framework, so that an agent can reason over learner state without each deployment writing a bespoke adapter. This is the paper's central empirical finding: Moodle scores 0 here because the two subsystems share zero imports."
+    },
+    "3.5_Write_Back_Capability": {
+      "name": "Write-Back Capability",
+      "level": "L3",
+      "grounding": ["T"],
+      "definition": "Whether an agent can write decisions, interventions, or annotations back into the platform's persistent state, rather than only reading from it. Required for any agent that needs to act on its reasoning."
+    },
+    "3.6_SRL_Detection_Logic": {
+      "name": "SRL Detection Logic",
+      "level": "L3",
+      "grounding": ["Z", "H"],
+      "definition": "Whether the platform or its AI subsystem includes built-in logic to detect self-regulated learning phase transitions, regulation failures, or scaffolding opportunities, rather than requiring each agent to reimplement SRL-aware reasoning from scratch."
+    },
+    "3.7_Contextual_Adaptation": {
+      "name": "Contextual Adaptation",
+      "level": "L3",
+      "grounding": ["Z", "H"],
+      "definition": "Whether agent reasoning can be adapted to course, activity, and learner context automatically, through platform-supplied context rather than manual per-deployment configuration."
+    },
+
+    "4.1_Agent_Registry": {
+      "name": "Agent Registry",
+      "level": "L4",
+      "grounding": ["T"],
+      "definition": "Whether multiple agents can register with the platform as discoverable entities, so that the platform (and other agents) know which agents are active and what capabilities each declares."
+    },
+    "4.2_Shared_State_Store": {
+      "name": "Shared State Store",
+      "level": "L4",
+      "grounding": ["T"],
+      "definition": "Whether agents share a common workspace of state they all read and write with appropriate isolation. Required for multi-agent scenarios where one agent's observation must inform another's action."
+    },
+    "4.3_Coordination_Protocol": {
+      "name": "Coordination Protocol",
+      "level": "L4",
+      "grounding": ["T"],
+      "definition": "Whether a coordination protocol (message bus, supervisory agent, choreographed workflow) governs agent interaction, so that agents do not simply race against each other over learner attention."
+    },
+    "4.4_Conflict_Resolution": {
+      "name": "Conflict Resolution",
+      "level": "L4",
+      "grounding": ["T", "H"],
+      "definition": "Whether the platform arbitrates contradictory interventions from concurrent agents (e.g., one agent pushing a hint while another pushes a reflection prompt). Without this, agent interactions can harm rather than scaffold learning."
+    },
+    "4.5_Scalability_Architecture": {
+      "name": "Scalability Architecture",
+      "level": "L4",
+      "grounding": ["T"],
+      "definition": "Whether the agent-coordination infrastructure scales to production workloads with concurrency control, queueing, and retry logic, rather than being a prototype that breaks under load."
+    },
+
+    "5.1_Message_Delivery": {
+      "name": "Message Delivery",
+      "level": "L5",
+      "grounding": ["H"],
+      "definition": "Whether agents can deliver messages to learners through platform-native channels (in-page notifications, messaging system, dashboard), reaching the learner inside the learning environment rather than via external email."
+    },
+    "5.2_UI_Injection": {
+      "name": "UI Injection",
+      "level": "L5",
+      "grounding": ["H"],
+      "definition": "Whether agents can inject UI components (hints, suggestions, inline feedback, widgets) into the learner's active view of a learning activity, rather than only speaking from a separate chat panel."
+    },
+    "5.3_Content_Generation": {
+      "name": "Content Generation",
+      "level": "L5",
+      "grounding": ["T", "H"],
+      "definition": "Whether agents can generate and deliver adaptive content (follow-up questions, worked examples, scaffolds, alternative explanations) that the platform presents as first-class learning material."
+    },
+    "5.4_Feedback_Loop": {
+      "name": "Feedback Loop",
+      "level": "L5",
+      "grounding": ["Z", "H"],
+      "definition": "Whether delivered interventions are observable back to the agent as events, so the agent learns whether its scaffolding worked. Closes the regulate-reflect-adjust cycle at the platform level."
+    },
+    "5.5_Timing_Intelligence": {
+      "name": "Timing Intelligence",
+      "level": "L5",
+      "grounding": ["Z", "H"],
+      "definition": "Whether agents can select pedagogically appropriate delivery moments (just-in-time scaffolding, not during peak cognitive load). Requires the platform to supply real-time learner-state context to the agent's timing logic."
+    }
+  }
+}
