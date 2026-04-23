@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: "If you use this analysis or the STAIR framework in your research, please cite as below."
+title: "STAIR: Scaffold for Teaching Agent Reasoning Readiness — Evaluating Moodle's Architecture for AI Teaching Agent Reasoning"
+authors:
+  - family-names: "Jafri"
+    given-names: "Baqar"
+    affiliation: "University of Stirling"
+    email: "baqar@nexgenclass.com"
+date-released: "2026-04-24"
+repository-code: "https://github.com/baqarjafri/paper-stair-framework"
+url: "https://github.com/baqarjafri/paper-stair-framework"
+license: MIT
+license-url: "https://github.com/baqarjafri/paper-stair-framework/blob/main/LICENSE"
+keywords:
+  - "AI teaching agents"
+  - "Moodle"
+  - "learning management systems"
+  - "self-regulated learning"
+  - "agent reasoning"
+  - "LMS architecture"
+  - "STAIR framework"
+preferred-citation:
+  type: conference-paper
+  title: "STAIR: Scaffold for Teaching Agent Reasoning Readiness — Evaluating Moodle's Architecture for AI Teaching Agent Reasoning"
+  authors:
+    - family-names: "Jafri"
+      given-names: "Baqar"
+      affiliation: "University of Stirling"
+      email: "baqar@nexgenclass.com"
+  year: 2026
+  collection-title: "Proceedings of the Artificial Intelligence and the Transformation of Higher Education Symposium (AITHE 2026)"
+  conference:
+    name: "AITHE 2026 — Artificial Intelligence and the Transformation of Higher Education Symposium"
+    city: "Swansea"
+    country: "GB"
+    date-start: "2026-07-01"
+    date-end: "2026-07-03"

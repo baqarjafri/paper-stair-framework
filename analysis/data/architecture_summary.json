@@ -1,0 +1,116 @@
+{
+  "moodle_source": "C:\\Users\\Ghulam\\ClaudeCodeProjects\\1st Paper\\moodle_src",
+  "web_services": {
+    "count": 402,
+    "file": "lib/db/services.php"
+  },
+  "ai_providers": {
+    "count": 6,
+    "providers": [
+      "awsbedrock",
+      "azureai",
+      "deepseek",
+      "gemini",
+      "ollama",
+      "openai"
+    ],
+    "path": "ai/provider/"
+  },
+  "ai_actions": {
+    "count": 4,
+    "actions": [
+      "explain_text",
+      "generate_image",
+      "generate_text",
+      "summarise_text"
+    ],
+    "path": "ai/classes/aiactions/"
+  },
+  "ai_analytics_isolation": {
+    "ai_references_analytics": 0,
+    "analytics_references_ai": 0,
+    "isolated": true,
+    "ai_files_with_refs": [],
+    "analytics_files_with_refs": []
+  },
+  "analytics_targets": {
+    "count": 8,
+    "targets": [
+      "course_competencies",
+      "course_completion",
+      "course_dropout",
+      "course_enrolments",
+      "course_gradetopass",
+      "no_access_since_course_start",
+      "no_recent_accesses",
+      "no_teaching"
+    ]
+  },
+  "scheduled_tasks": {
+    "count": 62,
+    "tasks": [
+      "analytics_cleanup_task",
+      "antivirus_cleanup_task",
+      "asynchronous_backup_task",
+      "asynchronous_copy_task",
+      "asynchronous_restore_task",
+      "automated_backup_report_task",
+      "automated_backup_task",
+      "backup_cleanup_task",
+      "badges_adhoc_task",
+      "badges_cron_task",
+      "badges_message_task",
+      "blog_cron_task",
+      "build_installed_themes_task",
+      "cache_cleanup_task",
+      "cache_cron_task",
+      "calendar_cron_task",
+      "calendar_fix_orphaned_events",
+      "check_for_updates_task",
+      "clean_up_deleted_search_area_task",
+      "complete_plans_task",
+      "completion_daily_task",
+      "completion_regular_task",
+      "context_cleanup_task",
+      "course_backup_task",
+      "create_contexts_task",
+      "database_logger",
+      "delete_incomplete_users_task",
+      "delete_unconfirmed_users_task",
+      "failed_task_callbacks",
+      "file_temp_cleanup_task",
+      "file_trash_cleanup_task",
+      "fix_file_timestamps_task",
+      "grade_cron_task",
+      "grade_history_cleanup_task",
+      "h5p_clean_orphaned_records_task",
+      "h5p_get_content_types_task",
+      "hide_ended_courses_task",
+      "logging_trait",
+      "logmanager",
+      "messaging_cleanup_task",
+      "password_reset_cleanup_task",
+      "plagiarism_cron_task",
+      "portfolio_cron_task",
+      "question_preview_cleanup_task",
+      "refresh_mod_calendar_events_task",
+      "registration_cron_task",
+      "search_index_task",
+      "search_optimize_task",
+      "send_failed_login_notifications_task",
+      "send_login_notifications",
+      "send_new_user_passwords_task",
+      "session_cleanup_task",
+      "show_started_courses_task",
+      "stats_cron_task",
+      "stored_progress_bar_cleanup_task",
+      "stored_progress_task_trait",
+      "sync_plans_from_template_cohorts_task",
+      "tag_cron_task",
+      "task_lock_cleanup_task",
+      "task_log_cleanup_task",
+      "task_logger",
+      "update_geoip2file_task"
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "_meta": {
+    "description": "STAIR sub-dimension readiness scores for Moodle 5.2dev+ (Build: 20260320)",
+    "scale": "0-4 ordinal (0=Absent, 1=Nascent, 2=Partial, 3=Substantial, 4=Ready)",
+    "source": "Source code analysis of github.com/moodle/moodle main branch",
+    "rubric": "STAIR_SCORING_INSTRUMENT.md",
+    "evaluation": "task3/STAIR_EVALUATION.md",
+    "assessed_by": "Baqar Jafri, University of Stirling",
+    "date": "2026-03-26"
+  },
+  "levels": {
+    "L1_Event_Sensing": {
+      "sub_dimensions": {
+        "1.1_Event_Coverage": {"score": 3, "evidence": "228 core event classes with LEVEL_PARTICIPATING/TEACHING/OTHER classification in lib/classes/event/"},
+        "1.2_Observer_Subscription": {"score": 2, "evidence": "Internal observers via db/events.php, no external streaming API"},
+        "1.3_SRL_Phase_Observability": {"score": 2, "evidence": "Performance phase strong (quiz attempts, submissions), Forethought phase weak (no goal-setting events)"},
+        "1.4_Real_Time_External_Access": {"score": 1, "evidence": "Log store polling only via mdl_logstore_standard_log, no WebSocket/streaming"},
+        "1.5_Event_Enrichment": {"score": 3, "evidence": "Context hierarchy (system/course/module), other[] field, but no prior-state capture"}
+      },
+      "level_score_pct": 55,
+      "level_score_pct_consolidated": 55
+    },
+    "L2_Student_State": {
+      "sub_dimensions": {
+        "2.1_Raw_Data_Availability": {"score": 3, "evidence": "Grades, completion, competencies, event logs all queryable"},
+        "2.2_Analytics_Framework": {"score": 3, "evidence": "8 prediction targets, ML pipeline with Python backend, time-splitting strategies"},
+        "2.3_Unified_Learner_Model": {"score": 1, "evidence": "Data scattered across mdl_grade_grades, mdl_course_modules_completion, mdl_competency — no unified API"},
+        "2.4_API_Query_Capability": {"score": 3, "evidence": "402 web service functions, token auth, REST/SOAP"},
+        "2.5_Temporal_Analytics": {"score": 2, "evidence": "Time-splitting strategies exist in analytics framework, no real-time session tracking"},
+        "2.6_Privacy_Aware_Access": {"score": 2, "evidence": "Role-based access via capabilities system, no fine-grained agent consent model"}
+      },
+      "level_score_pct": 58,
+      "level_score_pct_consolidated": 53
+    },
+    "L3_Agent_Reasoning": {
+      "sub_dimensions": {
+        "3.1_AI_Subsystem_Infrastructure": {"score": 2, "evidence": "6 providers (openai, azureai, awsbedrock, gemini, deepseek, ollama), 4 action types, but user-initiated only"},
+        "3.2_Agent_Identity_Model": {"score": 0, "evidence": "No agent role in capabilities system, no agent-specific permissions"},
+        "3.3_Reasoning_Pipeline": {"score": 0, "evidence": "No planner, no goal-setting for agents, no reasoning chain"},
+        "3.4_AI_Analytics_Bridge": {"score": 0, "evidence": "Zero cross-imports between core_ai (ai/) and core_analytics (analytics/) — verified by grep"},
+        "3.5_Write_Back_Capability": {"score": 2, "evidence": "Web services exist for grades, messages, calendar but no agent-specific write API"},
+        "3.6_SRL_Detection_Logic": {"score": 1, "evidence": "Dropout prediction exists in analytics targets, no SRL phase detection"},
+        "3.7_Contextual_Adaptation": {"score": 1, "evidence": "Placements (courseassist, editor) exist but no learner-context adaptation"}
+      },
+      "level_score_pct": 21,
+      "level_score_pct_consolidated": 25
+    },
+    "L4_Orchestration": {
+      "sub_dimensions": {
+        "4.1_Agent_Registry": {"score": 0, "evidence": "No multi-agent registry or agent discovery mechanism"},
+        "4.2_Shared_State_Store": {"score": 0, "evidence": "No shared agent memory or coordination state"},
+        "4.3_Coordination_Protocol": {"score": 0, "evidence": "No inter-agent communication protocol"},
+        "4.4_Conflict_Resolution": {"score": 0, "evidence": "No priority or conflict management for competing agents"},
+        "4.5_Scalability_Architecture": {"score": 1, "evidence": "Task system (scheduled + ad-hoc) can queue work but not agent-aware"}
+      },
+      "level_score_pct": 5,
+      "level_score_pct_consolidated": 5
+    },
+    "L5_Intervention_Delivery": {
+      "sub_dimensions": {
+        "5.1_Message_Delivery": {"score": 2, "evidence": "Messaging API and notification system exist, but no agent-specific channel"},
+        "5.2_UI_Injection": {"score": 1, "evidence": "Output renderers, blocks, but no real-time content injection"},
+        "5.3_Content_Generation": {"score": 2, "evidence": "AI generate_text/generate_image exist, not connected to intervention pipeline"},
+        "5.4_Feedback_Loop": {"score": 1, "evidence": "Grade feedback exists, but no intervention tracking or outcome measurement"},
+        "5.5_Timing_Intelligence": {"score": 0, "evidence": "No optimal-timing engine, no engagement-aware scheduling"}
+      },
+      "level_score_pct": 30,
+      "level_score_pct_consolidated": 22
+    }
+  }
+}

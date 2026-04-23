@@ -1,0 +1,244 @@
+{
+  "_meta": {
+    "description": "Table 3 scores derived from raw sub-dimensions via documented mapping",
+    "source": "moodle_scores.json",
+    "script": "code/derive_table3.py",
+    "rubric": "0=0%, 1=25%, 2=50%, 3=75%, 4=100%"
+  },
+  "table3": {
+    "L1": {
+      "COV": 75,
+      "ACC": 50,
+      "EDU": 50,
+      "TMP": 25,
+      "INT": 75,
+      "avg": 55
+    },
+    "L2": {
+      "COV": 75,
+      "ACC": 75,
+      "EDU": 25,
+      "TMP": 50,
+      "INT": 38,
+      "avg": 53
+    },
+    "L3": {
+      "COV": 50,
+      "ACC": 50,
+      "EDU": 0,
+      "TMP": 25,
+      "INT": 0,
+      "avg": 25
+    },
+    "L4": {
+      "COV": 0,
+      "ACC": 0,
+      "EDU": 0,
+      "TMP": 0,
+      "INT": 25,
+      "avg": 5
+    },
+    "L5": {
+      "COV": 50,
+      "ACC": 25,
+      "EDU": 12,
+      "TMP": 0,
+      "INT": 25,
+      "avg": 22
+    }
+  },
+  "mapping": {
+    "L1": {
+      "COV": [
+        [
+          "1.1_Event_Coverage",
+          1.0
+        ]
+      ],
+      "ACC": [
+        [
+          "1.2_Observer_Subscription",
+          1.0
+        ]
+      ],
+      "EDU": [
+        [
+          "1.3_SRL_Phase_Observability",
+          1.0
+        ]
+      ],
+      "TMP": [
+        [
+          "1.4_Real_Time_External_Access",
+          1.0
+        ]
+      ],
+      "INT": [
+        [
+          "1.5_Event_Enrichment",
+          1.0
+        ]
+      ]
+    },
+    "L2": {
+      "COV": [
+        [
+          "2.1_Raw_Data_Availability",
+          0.5
+        ],
+        [
+          "2.2_Analytics_Framework",
+          0.5
+        ]
+      ],
+      "ACC": [
+        [
+          "2.4_API_Query_Capability",
+          1.0
+        ]
+      ],
+      "EDU": [
+        [
+          "2.3_Unified_Learner_Model",
+          1.0
+        ]
+      ],
+      "TMP": [
+        [
+          "2.5_Temporal_Analytics",
+          1.0
+        ]
+      ],
+      "INT": [
+        [
+          "2.6_Privacy_Aware_Access",
+          0.5
+        ],
+        [
+          "2.3_Unified_Learner_Model",
+          0.5
+        ]
+      ]
+    },
+    "L3": {
+      "COV": [
+        [
+          "3.1_AI_Subsystem_Infrastructure",
+          1.0
+        ]
+      ],
+      "ACC": [
+        [
+          "3.5_Write_Back_Capability",
+          1.0
+        ]
+      ],
+      "EDU": [
+        [
+          "3.2_Agent_Identity_Model",
+          0.5
+        ],
+        [
+          "3.3_Reasoning_Pipeline",
+          0.5
+        ]
+      ],
+      "TMP": [
+        [
+          "3.6_SRL_Detection_Logic",
+          0.5
+        ],
+        [
+          "3.7_Contextual_Adaptation",
+          0.5
+        ]
+      ],
+      "INT": [
+        [
+          "3.4_AI_Analytics_Bridge",
+          1.0
+        ]
+      ]
+    },
+    "L4": {
+      "COV": [
+        [
+          "4.1_Agent_Registry",
+          1.0
+        ]
+      ],
+      "ACC": [
+        [
+          "4.2_Shared_State_Store",
+          1.0
+        ]
+      ],
+      "EDU": [
+        [
+          "4.3_Coordination_Protocol",
+          0.5
+        ],
+        [
+          "4.4_Conflict_Resolution",
+          0.5
+        ]
+      ],
+      "TMP": [
+        [
+          "4.3_Coordination_Protocol",
+          0.5
+        ],
+        [
+          "4.4_Conflict_Resolution",
+          0.5
+        ]
+      ],
+      "INT": [
+        [
+          "4.5_Scalability_Architecture",
+          1.0
+        ]
+      ]
+    },
+    "L5": {
+      "COV": [
+        [
+          "5.1_Message_Delivery",
+          0.5
+        ],
+        [
+          "5.3_Content_Generation",
+          0.5
+        ]
+      ],
+      "ACC": [
+        [
+          "5.2_UI_Injection",
+          1.0
+        ]
+      ],
+      "EDU": [
+        [
+          "5.4_Feedback_Loop",
+          0.5
+        ],
+        [
+          "5.5_Timing_Intelligence",
+          0.5
+        ]
+      ],
+      "TMP": [
+        [
+          "5.5_Timing_Intelligence",
+          1.0
+        ]
+      ],
+      "INT": [
+        [
+          "5.4_Feedback_Loop",
+          1.0
+        ]
+      ]
+    }
+  }
+}

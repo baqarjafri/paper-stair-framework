@@ -1,0 +1,140 @@
+{
+  "_meta": {
+    "description": "Manifest of every quantitative claim the AITHE-2026 STAIR paper makes. verify_claims.py reads this file, produces the reproduced value for each claim, and prints a ✓/✗ comparison table. Any drift between paper and reproduced values trips a nonzero exit code.",
+    "paper": "Paper_1_STAIR_AITHE2026",
+    "paper_sections_of_truth": "sections/05_results.md, sections/04_methodology.md",
+    "note": "If a claim here is updated, the paper text must be updated in the same commit, and vice versa."
+  },
+  "claims": [
+    {
+      "id": "L1_readiness",
+      "section": "§5 Results (Table 3)",
+      "claim": "L1 Event Sensing readiness = 55%",
+      "source": "derive_table3.py",
+      "data_file": "analysis/data/moodle_scores.json",
+      "output_key": "table3.L1.avg",
+      "expected": 55,
+      "tolerance": 0
+    },
+    {
+      "id": "L2_readiness",
+      "section": "§5 Results (Table 3)",
+      "claim": "L2 Student State readiness = 53%",
+      "source": "derive_table3.py",
+      "data_file": "analysis/data/moodle_scores.json",
+      "output_key": "table3.L2.avg",
+      "expected": 53,
+      "tolerance": 0
+    },
+    {
+      "id": "L3_readiness",
+      "section": "§5 Results (Table 3)",
+      "claim": "L3 Agent Reasoning readiness = 25%",
+      "source": "derive_table3.py",
+      "data_file": "analysis/data/moodle_scores.json",
+      "output_key": "table3.L3.avg",
+      "expected": 25,
+      "tolerance": 0
+    },
+    {
+      "id": "L4_readiness",
+      "section": "§5 Results (Table 3)",
+      "claim": "L4 Orchestration readiness = 5%",
+      "source": "derive_table3.py",
+      "data_file": "analysis/data/moodle_scores.json",
+      "output_key": "table3.L4.avg",
+      "expected": 5,
+      "tolerance": 0
+    },
+    {
+      "id": "L5_readiness",
+      "section": "§5 Results (Table 3)",
+      "claim": "L5 Intervention Delivery readiness = 22%",
+      "source": "derive_table3.py",
+      "data_file": "analysis/data/moodle_scores.json",
+      "output_key": "table3.L5.avg",
+      "expected": 22,
+      "tolerance": 0
+    },
+    {
+      "id": "L2_to_L3_cliff",
+      "section": "§5 Results, Abstract, Fig 1 teaser",
+      "claim": "28-point cliff between L2 (53%) and L3 (25%)",
+      "source": "derived: table3.L2.avg - table3.L3.avg",
+      "data_file": "analysis/data/moodle_scores.json",
+      "output_key": "table3.L2.avg - table3.L3.avg",
+      "expected": 28,
+      "tolerance": 0
+    },
+    {
+      "id": "ai_analytics_isolated",
+      "section": "§5 Results (central finding)",
+      "claim": "Zero cross-imports between core_ai and core_analytics",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/ai/, moodle_src/analytics/",
+      "output_key": "ai_analytics_isolation.isolated",
+      "expected": true,
+      "tolerance": 0
+    },
+    {
+      "id": "ai_refs_analytics_count",
+      "section": "§5 Results",
+      "claim": "core_ai references to core_analytics = 0",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/ai/",
+      "output_key": "ai_analytics_isolation.ai_references_analytics",
+      "expected": 0,
+      "tolerance": 0
+    },
+    {
+      "id": "analytics_refs_ai_count",
+      "section": "§5 Results",
+      "claim": "core_analytics references to core_ai = 0",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/analytics/",
+      "output_key": "ai_analytics_isolation.analytics_references_ai",
+      "expected": 0,
+      "tolerance": 0
+    },
+    {
+      "id": "web_services_count",
+      "section": "§5 Results",
+      "claim": "402 web service functions",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/lib/db/services.php",
+      "output_key": "web_services.count",
+      "expected": 402,
+      "tolerance": 5
+    },
+    {
+      "id": "ai_providers_count",
+      "section": "§5 Results",
+      "claim": "6 AI providers",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/ai/provider/",
+      "output_key": "ai_providers.count",
+      "expected": 6,
+      "tolerance": 0
+    },
+    {
+      "id": "ai_actions_count",
+      "section": "§5 Results",
+      "claim": "4 AI action types",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/ai/classes/aiactions/",
+      "output_key": "ai_actions.count",
+      "expected": 4,
+      "tolerance": 0
+    },
+    {
+      "id": "analytics_targets_count",
+      "section": "§5 Results",
+      "claim": "8 analytics prediction targets",
+      "source": "analyze_architecture.py",
+      "data_file": "moodle_src/course/classes/analytics/target/",
+      "output_key": "analytics_targets.count",
+      "expected": 8,
+      "tolerance": 2
+    }
+  ]
+}

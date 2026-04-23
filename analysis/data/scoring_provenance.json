@@ -1,0 +1,269 @@
+{
+  "_meta": {
+    "description": "Scoring provenance: maps each Table 3 cell (5 levels x 5 consolidated dimensions) to its source evidence from the 32 raw sub-dimensions in moodle_scores.json",
+    "consolidated_dimensions": {
+      "COV": "Coverage and Classification — breadth and taxonomic quality of infrastructure for this level",
+      "ACC": "External Accessibility — whether an external agent can programmatically access this capability",
+      "EDU": "Educational Specificity — whether the capability carries pedagogically meaningful information",
+      "TMP": "Temporal Availability — whether the capability operates in real time or only batch/retrospective",
+      "INT": "Cross-Subsystem Integration — whether this capability connects to adjacent subsystems to enable agent workflows"
+    },
+    "scoring_method": "Each consolidated cell is derived by mapping one or more raw sub-dimensions to the consolidated dimension, converting raw 0-4 scores to the 0/25/50/75/100 rubric scale, and averaging. Where a raw sub-dimension spans two consolidated dimensions, it contributes to both with the noted weight.",
+    "rubric_scale": {"0": "Absent (0)", "1": "Nascent (25)", "2": "Partial (50)", "3": "Substantial (75)", "4": "Ready (100)"},
+    "source_data": "moodle_scores.json",
+    "source_instrument": "STAIR_SCORING_INSTRUMENT.md",
+    "platform": "Moodle 5.2dev+ (Build 20260320)"
+  },
+  "mapping": {
+    "L1_Event_Sensing": {
+      "COV": {
+        "score": 75,
+        "sources": [
+          {"raw_id": "1.1_Event_Coverage", "raw_score": 3, "pct": 75, "weight": 1.0}
+        ],
+        "derivation": "Single source: 1.1 Event Coverage scored 3 (Substantial) = 75. 228 core event classes with LEVEL_PARTICIPATING/TEACHING/OTHER classification.",
+        "evidence": "lib/classes/event/ — 228 event classes; base_event.php defines edulevel constants (LEVEL_PARTICIPATING, LEVEL_TEACHING, LEVEL_OTHER); CRUD classification via 'c','r','u','d' constants."
+      },
+      "ACC": {
+        "score": 50,
+        "sources": [
+          {"raw_id": "1.2_Observer_Subscription", "raw_score": 2, "pct": 50, "weight": 1.0}
+        ],
+        "derivation": "Single source: 1.2 Observer Subscription scored 2 (Partial) = 50. Internal observers exist via db/events.php but no external streaming API.",
+        "evidence": "db/events.php observer registration; lib/classes/event/manager.php dispatch; no WebSocket/SSE endpoint; external access requires plugin deployment."
+      },
+      "EDU": {
+        "score": 50,
+        "sources": [
+          {"raw_id": "1.3_SRL_Phase_Observability", "raw_score": 2, "pct": 50, "weight": 1.0}
+        ],
+        "derivation": "Single source: 1.3 SRL Phase Observability scored 2 (Partial) = 50. Performance phase strong (quiz attempts, submissions), Forethought phase weak (no goal-setting events).",
+        "evidence": "mod/quiz/classes/event/ — 15+ attempt events; mod/assign/classes/event/ — submission events; NO events for goal formulation, study scheduling, or strategy selection. Reflection partially covered via mod/workshop peer assessment events."
+      },
+      "TMP": {
+        "score": 25,
+        "sources": [
+          {"raw_id": "1.4_Real_Time_External_Access", "raw_score": 1, "pct": 25, "weight": 1.0}
+        ],
+        "derivation": "Single source: 1.4 Real-Time External Access scored 1 (Nascent) = 25. Log store polling only via mdl_logstore_standard_log, no streaming.",
+        "evidence": "admin/tool/log/store/ — database log store only; no WebSocket, no Server-Sent Events, no message queue integration; agents must poll mdl_logstore_standard_log table."
+      },
+      "INT": {
+        "score": 75,
+        "sources": [
+          {"raw_id": "1.5_Event_Enrichment", "raw_score": 3, "pct": 75, "weight": 1.0}
+        ],
+        "derivation": "Single source: 1.5 Event Enrichment scored 3 (Substantial) = 75. Context hierarchy (system/course/module) and other[] field present, but no prior-state capture.",
+        "evidence": "base_event.php: contextlevel, contextinstanceid, courseid, userid, relateduserid, other[] array; context hierarchy enables cross-subsystem joins; gap: no before/after state diff in events."
+      },
+      "level_avg": 55,
+      "paper_reports": 72,
+      "discrepancy_note": "DISCREPANCY: Raw 5-dimension average = 55%. Paper Table 3 reports 72%. The 72% figure was scored in a separate pass and is NOT derivable from the 32 raw sub-dimensions. This provenance file corrects the scores to match the documented evidence."
+    },
+    "L2_Student_State": {
+      "COV": {
+        "score": 75,
+        "sources": [
+          {"raw_id": "2.1_Raw_Data_Availability", "raw_score": 3, "pct": 75, "weight": 0.5},
+          {"raw_id": "2.2_Analytics_Framework", "raw_score": 3, "pct": 75, "weight": 0.5}
+        ],
+        "derivation": "Average of 2.1 (75) and 2.2 (75) = 75. Rich raw data plus ML analytics pipeline.",
+        "evidence": "mdl_grade_grades, mdl_course_modules_completion, mdl_competency tables; analytics/classes/ — 8 prediction targets including dropout risk; ML pipeline with Python backend and time-splitting strategies."
+      },
+      "ACC": {
+        "score": 75,
+        "sources": [
+          {"raw_id": "2.4_API_Query_Capability", "raw_score": 3, "pct": 75, "weight": 1.0}
+        ],
+        "derivation": "Single source: 2.4 API Query Capability scored 3 (Substantial) = 75. 402 web service functions with token auth.",
+        "evidence": "lib/externallib.php — 402 web service functions; REST and SOAP protocols; token-based authentication; covers grades, completion, enrolment, competencies."
+      },
+      "EDU": {
+        "score": 25,
+        "sources": [
+          {"raw_id": "2.3_Unified_Learner_Model", "raw_score": 1, "pct": 25, "weight": 1.0}
+        ],
+        "derivation": "Single source: 2.3 Unified Learner Model scored 1 (Nascent) = 25. Data scattered across tables with no unified student profile API.",
+        "evidence": "Student state fragmented: mdl_grade_grades, mdl_course_modules_completion, mdl_competency, mdl_analytics_predictions — no unified query endpoint; agent must assemble profile from 4+ independent queries."
+      },
+      "TMP": {
+        "score": 50,
+        "sources": [
+          {"raw_id": "2.5_Temporal_Analytics", "raw_score": 2, "pct": 50, "weight": 1.0}
+        ],
+        "derivation": "Single source: 2.5 Temporal Analytics scored 2 (Partial) = 50. Time-splitting strategies exist but no real-time session tracking.",
+        "evidence": "analytics/classes/local/time_splitting/ — quarterly, weekly, past-3-days strategies; predictions run on cron schedule, not real-time; no session-level temporal analytics."
+      },
+      "INT": {
+        "score": 25,
+        "sources": [
+          {"raw_id": "2.6_Privacy_Aware_Access", "raw_score": 2, "pct": 50, "weight": 0.5},
+          {"raw_id": "2.3_Unified_Learner_Model", "raw_score": 1, "pct": 25, "weight": 0.5}
+        ],
+        "derivation": "Average of 2.6 (50) and 2.3 integration aspect (25) = 37.5, rounded to 38. Privacy system exists but no agent consent model; learner model fragmentation means cross-subsystem queries require manual joins.",
+        "evidence": "Role-based access via capabilities system (access/capability.php); no agent-specific permission model; analytics predictions NOT exposed via web services — internal only."
+      },
+      "level_avg": 50,
+      "paper_reports": 58,
+      "discrepancy_note": "DISCREPANCY: Consolidated 5-dimension average = 50%. Paper reports 58%. Raw 6-dimension average = 58.3%. The paper's 58% matches the raw system, not the consolidated system."
+    },
+    "L3_Agent_Reasoning": {
+      "COV": {
+        "score": 50,
+        "sources": [
+          {"raw_id": "3.1_AI_Subsystem_Infrastructure", "raw_score": 2, "pct": 50, "weight": 1.0}
+        ],
+        "derivation": "Single source: 3.1 AI Subsystem Infrastructure scored 2 (Partial) = 50. 6 providers and 4 action types exist but are user-initiated only.",
+        "evidence": "ai/classes/provider/ — openai, azureai, awsbedrock, gemini, deepseek, ollama; ai/classes/action/ — generate_text, generate_image, summarise, explain; all require user-initiated placement trigger, no autonomous invocation."
+      },
+      "ACC": {
+        "score": 50,
+        "sources": [
+          {"raw_id": "3.5_Write_Back_Capability", "raw_score": 2, "pct": 50, "weight": 1.0}
+        ],
+        "derivation": "Single source: 3.5 Write-Back Capability scored 2 (Partial) = 50. Web services exist for grades and messages but no agent-specific write API.",
+        "evidence": "core_message_send_instant_messages, core_grades_update_grades web services exist; no agent-attributed write channel; interventions not distinguishable from instructor actions in the database."
+      },
+      "EDU": {
+        "score": 0,
+        "sources": [
+          {"raw_id": "3.2_Agent_Identity_Model", "raw_score": 0, "pct": 0, "weight": 0.5},
+          {"raw_id": "3.3_Reasoning_Pipeline", "raw_score": 0, "pct": 0, "weight": 0.5}
+        ],
+        "derivation": "Average of 3.2 (0) and 3.3 (0) = 0. No agent role, no reasoning pipeline, no pedagogical reasoning whatsoever.",
+        "evidence": "No agent role in mdl_role table or capabilities system; no planner, goal-setter, or reasoning chain in ai/classes/; all AI actions are stateless text/image generation."
+      },
+      "TMP": {
+        "score": 25,
+        "sources": [
+          {"raw_id": "3.6_SRL_Detection_Logic", "raw_score": 1, "pct": 25, "weight": 0.5},
+          {"raw_id": "3.7_Contextual_Adaptation", "raw_score": 1, "pct": 25, "weight": 0.5}
+        ],
+        "derivation": "Average of 3.6 (25) and 3.7 (25) = 25. Dropout prediction exists in analytics but is batch; placements exist but are not learner-context-adaptive.",
+        "evidence": "analytics/classes/prediction/ — dropout models run on cron; ai/classes/placement/ — courseassist and editor placements are static, not adapted to learner state or timing."
+      },
+      "INT": {
+        "score": 0,
+        "sources": [
+          {"raw_id": "3.4_AI_Analytics_Bridge", "raw_score": 0, "pct": 0, "weight": 1.0}
+        ],
+        "derivation": "Single source: 3.4 AI-Analytics Bridge scored 0 (Absent) = 0. Zero cross-imports between core_ai and core_analytics.",
+        "evidence": "grep -r 'analytics' ai/classes/ = 0 results; grep -r 'ai/' analytics/classes/ = 0 results; no shared database tables; no event-channel subscriptions; complete code-level and data-level isolation."
+      },
+      "level_avg": 25,
+      "paper_reports": 25,
+      "discrepancy_note": "MATCH: Consolidated average (50+50+0+25+0)/5 = 25% matches paper's 25%."
+    },
+    "L4_Orchestration": {
+      "COV": {
+        "score": 0,
+        "sources": [
+          {"raw_id": "4.1_Agent_Registry", "raw_score": 0, "pct": 0, "weight": 1.0}
+        ],
+        "derivation": "Single source: 4.1 Agent Registry scored 0 (Absent) = 0. No multi-agent registry or discovery mechanism.",
+        "evidence": "No agent registry table, no agent discovery service, no agent type system in any Moodle subsystem."
+      },
+      "ACC": {
+        "score": 0,
+        "sources": [
+          {"raw_id": "4.2_Shared_State_Store", "raw_score": 0, "pct": 0, "weight": 1.0}
+        ],
+        "derivation": "Single source: 4.2 Shared State Store scored 0 (Absent) = 0. No shared agent memory or coordination state.",
+        "evidence": "No shared state table, no coordination cache, no agent-to-agent data channel."
+      },
+      "EDU": {
+        "score": 0,
+        "sources": [
+          {"raw_id": "4.3_Coordination_Protocol", "raw_score": 0, "pct": 0, "weight": 0.5},
+          {"raw_id": "4.4_Conflict_Resolution", "raw_score": 0, "pct": 0, "weight": 0.5}
+        ],
+        "derivation": "Average of 4.3 (0) and 4.4 (0) = 0. No inter-agent communication, no conflict resolution, no pedagogical coordination.",
+        "evidence": "No message protocol between agents; no priority system; no mechanism to prevent conflicting simultaneous interventions."
+      },
+      "TMP": {
+        "score": 0,
+        "sources": [
+          {"raw_id": "4.3_Coordination_Protocol", "raw_score": 0, "pct": 0, "weight": 0.5},
+          {"raw_id": "4.4_Conflict_Resolution", "raw_score": 0, "pct": 0, "weight": 0.5}
+        ],
+        "derivation": "Average of 4.3 (0) and 4.4 (0) = 0. No real-time coordination mechanism.",
+        "evidence": "Same as EDU — no coordination infrastructure exists at any temporal resolution."
+      },
+      "INT": {
+        "score": 25,
+        "sources": [
+          {"raw_id": "4.5_Scalability_Architecture", "raw_score": 1, "pct": 25, "weight": 1.0}
+        ],
+        "derivation": "Single source: 4.5 Scalability Architecture scored 1 (Nascent) = 25. Task system exists but is not agent-aware.",
+        "evidence": "lib/classes/task/ — scheduled_task and adhoc_task infrastructure; caching via MUC (Moodle Universal Cache); role-based permissions. These are repurposable building blocks, not agent coordination infrastructure."
+      },
+      "level_avg": 5,
+      "paper_reports": 8,
+      "discrepancy_note": "DISCREPANCY: Consolidated average (0+0+0+0+25)/5 = 5%. Paper reports 8%. The 5% matches the raw system."
+    },
+    "L5_Intervention_Delivery": {
+      "COV": {
+        "score": 50,
+        "sources": [
+          {"raw_id": "5.1_Message_Delivery", "raw_score": 2, "pct": 50, "weight": 0.5},
+          {"raw_id": "5.3_Content_Generation", "raw_score": 2, "pct": 50, "weight": 0.5}
+        ],
+        "derivation": "Average of 5.1 (50) and 5.3 (50) = 50. Two delivery channels exist: messaging and AI content generation.",
+        "evidence": "message/lib.php — messaging API; ai/classes/action/generate_text.php, generate_image.php — content generation. Both functional but not connected to intervention pipeline."
+      },
+      "ACC": {
+        "score": 25,
+        "sources": [
+          {"raw_id": "5.2_UI_Injection", "raw_score": 1, "pct": 25, "weight": 1.0}
+        ],
+        "derivation": "Single source: 5.2 UI Injection scored 1 (Nascent) = 25. Output renderers and blocks exist but no real-time content injection.",
+        "evidence": "lib/outputrenderers.php — rendering framework; blocks/ — block plugin system; no mechanism to inject content into an active learning activity in real time."
+      },
+      "EDU": {
+        "score": 0,
+        "sources": [
+          {"raw_id": "5.4_Feedback_Loop", "raw_score": 1, "pct": 25, "weight": 0.5},
+          {"raw_id": "5.5_Timing_Intelligence", "raw_score": 0, "pct": 0, "weight": 0.5}
+        ],
+        "derivation": "Average of 5.4 (25) and 5.5 (0) = 12.5, rounded to 13. Grade feedback exists but no intervention tracking, no outcome measurement, no timing intelligence.",
+        "evidence": "Grade feedback via mdl_assign_grades.feedback; no intervention effectiveness tracking; no link between AI action and subsequent student behaviour change; no optimal-timing engine."
+      },
+      "TMP": {
+        "score": 0,
+        "sources": [
+          {"raw_id": "5.5_Timing_Intelligence", "raw_score": 0, "pct": 0, "weight": 1.0}
+        ],
+        "derivation": "Single source: 5.5 Timing Intelligence scored 0 (Absent) = 0. No real-time delivery, no engagement-aware scheduling.",
+        "evidence": "No optimal-timing engine; no engagement-state detection; interventions cannot be triggered by real-time learner state changes."
+      },
+      "INT": {
+        "score": 25,
+        "sources": [
+          {"raw_id": "5.4_Feedback_Loop", "raw_score": 1, "pct": 25, "weight": 1.0}
+        ],
+        "derivation": "Single source: 5.4 Feedback Loop scored 1 (Nascent) = 25. Grade feedback exists but interventions are not tracked or connected to outcomes.",
+        "evidence": "Feedback stored in mdl_assign_grades; no intervention log table; no mechanism linking AI-generated intervention to subsequent learning outcome change."
+      },
+      "level_avg": 20,
+      "paper_reports": 18,
+      "discrepancy_note": "DISCREPANCY: Consolidated average (50+25+0+0+25)/5 = 20%. Raw average = 30%. Paper reports 18%. None match exactly."
+    }
+  },
+  "summary": {
+    "corrected_scores": {
+      "L1": {"COV": 75, "ACC": 50, "EDU": 50, "TMP": 25, "INT": 75, "avg": 55},
+      "L2": {"COV": 75, "ACC": 75, "EDU": 25, "TMP": 50, "INT": 38, "avg": 53},
+      "L3": {"COV": 50, "ACC": 50, "EDU": 0, "TMP": 25, "INT": 0, "avg": 25},
+      "L4": {"COV": 0, "ACC": 0, "EDU": 0, "TMP": 0, "INT": 25, "avg": 5},
+      "L5": {"COV": 50, "ACC": 25, "EDU": 13, "TMP": 0, "INT": 25, "avg": 23}
+    },
+    "paper_v11_scores": {
+      "L1": {"COV": 90, "ACC": 75, "EDU": 75, "TMP": 50, "INT": 70, "avg": 72},
+      "L2": {"COV": 85, "ACC": 70, "EDU": 50, "TMP": 50, "INT": 35, "avg": 58},
+      "L3": {"COV": 75, "ACC": 25, "EDU": 0, "TMP": 25, "INT": 0, "avg": 25},
+      "L4": {"COV": 0, "ACC": 5, "EDU": 0, "TMP": 5, "INT": 30, "avg": 8},
+      "L5": {"COV": 50, "ACC": 25, "EDU": 0, "TMP": 0, "INT": 15, "avg": 18}
+    },
+    "resolution": "The paper's Table 3 scores were produced in a separate scoring pass using the consolidated 5-dimension framework (COV/ACC/EDU/TMP/INT) but without a documented mapping to the original 32 raw sub-dimensions. The 'corrected_scores' above derive each Table 3 cell from the raw sub-dimensions using the 0/25/50/75/100 rubric scale with documented mappings. The paper must be updated to use either the corrected scores or re-justify the original Table 3 scores with per-cell evidence."
+  }
+}

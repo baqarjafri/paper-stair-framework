@@ -1,0 +1,228 @@
+Event,Category,Trigger,Key Payload Fields,SRL Phase,Agent Use Case,STAIR Level
+\core\event\course_viewed,Course,Student opens course page,"userid, courseid, other[coursesectionnumber]",Performance,Track engagement patterns; detect inactive students,L1-L2
+\core\event\course_completed,Course,All completion criteria met,"relateduserid, courseid, objectid",Reflection,Celebrate achievement; recommend next course,L2-L3
+\core\event\course_started,Course,Course start date reached,courseid,Forethought,Send welcome/orientation nudge,L2
+\core\event\course_ended,Course,Course end date reached,courseid,Reflection,Prompt reflection activity,L2
+\core\event\course_module_viewed,Course,Student views any activity,"userid, contextinstanceid, courseid",Performance,Track resource access sequence; time-on-task proxy,L1-L2
+\core\event\course_module_completion_updated,Course,Activity marked complete,"relateduserid, contextinstanceid, other[completionstate]",Performance/Reflection,Track progress; identify stalled students,L2-L3
+\core\event\course_completion_updated,Course,Completion criteria changed,courseid,Forethought,Notify students of criteria changes,L1
+\core\event\course_section_viewed,Course,Student views section,"userid, courseid",Performance,Track navigation patterns,L1
+\core\event\course_information_viewed,Course,Student views course info,"userid, courseid",Forethought,Detect pre-enrollment interest,L1
+\core\event\course_resources_list_viewed,Course,Student views resource list,"userid, courseid",Forethought,Detect resource seeking behavior,L1-L2
+\core\event\course_module_created,Course,Teacher adds activity,objectid,N/A,N/A,L0
+\core\event\course_module_updated,Course,Teacher edits activity,objectid,N/A,N/A,L0
+\core\event\course_module_deleted,Course,Teacher removes activity,objectid,N/A,N/A,L0
+\core\event\course_created,Course,New course created,"objectid, courseid",N/A,N/A,L0
+\core\event\course_updated,Course,Course settings changed,courseid,N/A,Detect structural changes,L1
+\core\event\course_deleted,Course,Course deleted,courseid,N/A,N/A,L0
+\core\event\course_user_report_viewed,Course,Student views own report,"userid, courseid, relateduserid",Reflection,Track self-monitoring behavior,L2
+\core\event\course_backup_created,Course,Course backed up,courseid,N/A,N/A,L0
+\core\event\course_restored,Course,Course restored from backup,courseid,N/A,N/A,L0
+\mod_quiz\event\attempt_started,Quiz,Student begins quiz,"relateduserid, objectid, other[quizid]",Performance,Detect start time; track attempt frequency,L1-L2
+\mod_quiz\event\attempt_submitted,Quiz,Student submits quiz,"relateduserid, objectid, other[submitterid, quizid, studentisonline]",Performance,Analyze submission timing; auto-trigger feedback,L2-L3
+\mod_quiz\event\attempt_viewed,Quiz,Student views attempt,"relateduserid, objectid",Reflection,Detect review behavior post-submission,L2
+\mod_quiz\event\attempt_reviewed,Quiz,Student reviews completed attempt,"relateduserid, objectid",Reflection,Confirm self-evaluation engagement,L2-L3
+\mod_quiz\event\attempt_summary_viewed,Quiz,Student views attempt summary,"relateduserid, objectid",Reflection,Detect summary review before submission,L2
+\mod_quiz\event\attempt_abandoned,Quiz,Quiz attempt times out,"relateduserid, objectid",Performance,Alert for time management issues,L2-L3
+\mod_quiz\event\attempt_becameoverdue,Quiz,Attempt exceeds time limit,"relateduserid, objectid",Performance,Flag time management problems,L2-L3
+\mod_quiz\event\attempt_graded,Quiz,Attempt auto-graded,"relateduserid, objectid",Performance,Trigger grade-based interventions,L2-L3
+\mod_quiz\event\attempt_regraded,Quiz,Attempt regraded,"relateduserid, objectid",Reflection,Notify student of grade change,L2
+\mod_quiz\event\attempt_deleted,Quiz,Teacher deletes attempt,objectid,N/A,Audit trail,L1
+\mod_quiz\event\attempt_reopened,Quiz,Teacher reopens attempt,objectid,Forethought,Notify student of retry opportunity,L2
+\mod_quiz\event\attempt_autosaved,Quiz,System auto-saves quiz,"relateduserid, objectid",Performance,Track in-progress engagement (heartbeat),L1-L2
+\mod_quiz\event\attempt_updated,Quiz,Attempt data updated,objectid,Performance,Track incremental progress,L1
+\mod_quiz\event\attempt_preview_started,Quiz,Teacher previews quiz,objectid,N/A,N/A,L0
+\mod_quiz\event\attempt_manual_grading_completed,Quiz,All manual grading done,objectid,Reflection,Notify students grades available,L2
+\mod_quiz\event\question_manually_graded,Quiz,Teacher grades essay question,"objectid, other[]",Reflection,Deliver personalized feedback,L3
+\mod_quiz\event\report_viewed,Quiz,Teacher views quiz report,objectid,N/A,N/A,L0
+\mod_quiz\event\quiz_grade_updated,Quiz,Quiz max grade changed,objectid,Forethought,Notify of grading criteria change,L1
+\mod_quiz\event\edit_page_viewed,Quiz,Teacher edits quiz,objectid,N/A,N/A,L0
+\mod_quiz\event\user_override_created,Quiz,Individual override set,"objectid, relateduserid",Forethought,Track accommodations,L2
+\mod_quiz\event\user_override_updated,Quiz,Individual override updated,"objectid, relateduserid",Forethought,Track accommodations,L2
+\mod_quiz\event\user_override_deleted,Quiz,Individual override removed,"objectid, relateduserid",N/A,Track accommodations,L1
+\mod_quiz\event\group_override_created,Quiz,Group override set,objectid,Forethought,Track group accommodations,L2
+\mod_quiz\event\group_override_updated,Quiz,Group override updated,objectid,Forethought,Track group accommodations,L2
+\mod_quiz\event\group_override_deleted,Quiz,Group override removed,objectid,N/A,Audit,L1
+\mod_quiz\event\slot_created,Quiz,Question added to quiz,objectid,N/A,N/A,L0
+\mod_quiz\event\slot_deleted,Quiz,Question removed from quiz,objectid,N/A,N/A,L0
+\mod_quiz\event\slot_moved,Quiz,Question reordered in quiz,objectid,N/A,N/A,L0
+\mod_quiz\event\attempt_question_restarted,Quiz,Student restarts question in attempt,objectid,Performance,Track question-level struggle,L2
+\mod_assign\event\assessable_submitted,Assignment,Student submits assignment,"userid, contextinstanceid",Performance,Detect submission timing vs deadline,L2-L3
+\mod_assign\event\submission_created,Assignment,Submission record created,"objectid, relateduserid",Performance,Track initial engagement,L1-L2
+\mod_assign\event\submission_updated,Assignment,Student edits submission,"objectid, relateduserid",Performance,Detect revision behavior (SRL indicator),L2-L3
+\mod_assign\event\submission_viewed,Assignment,Student views own submission,"objectid, relateduserid",Reflection,Confirm review behavior,L2
+\mod_assign\event\submission_duplicated,Assignment,Student copies prior submission,"objectid, relateduserid",Performance,Detect reuse patterns,L2
+\mod_assign\event\submission_graded,Assignment,Teacher grades submission,"objectid, relateduserid",Reflection,Trigger feedback delivery to student,L2-L3
+\mod_assign\event\submission_locked,Assignment,Teacher locks submission,"objectid, relateduserid",N/A,Audit,L1
+\mod_assign\event\submission_unlocked,Assignment,Teacher unlocks submission,"objectid, relateduserid",Performance,Notify student of resubmission opportunity,L2
+\mod_assign\event\submission_removed,Assignment,Submission removed,"objectid, relateduserid",Performance,Track withdrawal behavior,L2
+\mod_assign\event\submission_status_updated,Assignment,Status change (draft->submitted),"objectid, relateduserid",Performance,Track submission workflow,L2
+\mod_assign\event\submission_status_viewed,Assignment,Teacher views submission status,objectid,N/A,N/A,L0
+\mod_assign\event\submission_form_viewed,Assignment,Student opens submission form,objectid,Forethought,Detect task engagement intent,L1-L2
+\mod_assign\event\submission_confirmation_form_viewed,Assignment,Student views confirmation page,objectid,Performance,Detect pre-submit review,L2
+\mod_assign\event\feedback_viewed,Assignment,Student views teacher feedback,"objectid, relateduserid",Reflection,Confirm feedback engagement,L2-L3
+\mod_assign\event\grading_form_viewed,Assignment,Teacher opens grading form,"objectid, relateduserid",N/A,N/A,L0
+\mod_assign\event\grading_table_viewed,Assignment,Teacher views grading table,objectid,N/A,N/A,L0
+\mod_assign\event\extension_granted,Assignment,Teacher grants deadline extension,"objectid, relateduserid",Forethought,Track accommodation patterns,L2
+\mod_assign\event\workflow_state_updated,Assignment,Marking workflow state changes,"objectid, relateduserid",N/A,Track grading pipeline,L1
+\mod_assign\event\marker_updated,Assignment,Grading marker assigned,"objectid, relateduserid",N/A,Track grading workload,L1
+\mod_assign\event\statement_accepted,Assignment,Student accepts submission statement,objectid,Performance,Confirm academic integrity acknowledgment,L1
+\mod_assign\event\all_submissions_downloaded,Assignment,Teacher downloads all submissions,objectid,N/A,N/A,L0
+\mod_assign\event\identities_revealed,Assignment,Blind marking identities shown,objectid,N/A,N/A,L0
+\mod_forum\event\course_module_viewed,Forum,Student views forum,"userid, contextinstanceid",Performance,Track forum engagement,L1
+\mod_forum\event\discussion_created,Forum,Student starts discussion,"objectid, other[forumid, forumtype]",Performance,Detect discussion initiation (leadership signal),L2-L3
+\mod_forum\event\discussion_viewed,Forum,Student views discussion,objectid,Performance,Track content consumption vs creation,L1-L2
+\mod_forum\event\discussion_deleted,Forum,Discussion removed,objectid,N/A,Audit,L0
+\mod_forum\event\discussion_moved,Forum,Discussion moved to another forum,"objectid, other[fromforumid, toforumid]",N/A,N/A,L0
+\mod_forum\event\discussion_updated,Forum,Discussion edited,objectid,Performance,Track refinement behavior,L2
+\mod_forum\event\discussion_pinned,Forum,Discussion pinned,objectid,N/A,N/A,L0
+\mod_forum\event\discussion_unpinned,Forum,Discussion unpinned,objectid,N/A,N/A,L0
+\mod_forum\event\discussion_lock_updated,Forum,Discussion locked/unlocked,objectid,N/A,N/A,L0
+\mod_forum\event\discussion_subscription_created,Forum,User subscribes to discussion,"objectid, relateduserid",Forethought,Detect selective attention/interest,L2
+\mod_forum\event\discussion_subscription_deleted,Forum,User unsubscribes from discussion,"objectid, relateduserid",N/A,Track disengagement,L2
+\mod_forum\event\post_created,Forum,Student creates forum post,"objectid, other[discussionid, forumid, forumtype]",Performance,Measure discourse contribution; analyze timing,L2-L3
+\mod_forum\event\post_updated,Forum,Student edits post,"objectid, other[discussionid, forumid, forumtype]",Reflection,Detect self-correction/refinement,L2-L3
+\mod_forum\event\post_deleted,Forum,Post removed,objectid,N/A,Audit,L0
+\mod_forum\event\subscription_created,Forum,User subscribes to forum,"objectid, relateduserid",Forethought,Track engagement intent,L1-L2
+\mod_forum\event\subscription_deleted,Forum,User unsubscribes from forum,"objectid, relateduserid",N/A,Track disengagement,L2
+\mod_forum\event\subscription_mode_updated,Forum,Forum subscription mode changed,objectid,N/A,N/A,L0
+\mod_forum\event\readtracking_enabled,Forum,User enables read tracking,userid,Forethought,Detect self-monitoring behavior,L2-L3
+\mod_forum\event\readtracking_disabled,Forum,User disables read tracking,userid,N/A,Detect disengagement,L2
+\mod_forum\event\subscribers_viewed,Forum,Teacher views subscriber list,objectid,N/A,N/A,L0
+\mod_forum\event\assessable_uploaded,Forum,Student uploads to forum,"userid, contextinstanceid",Performance,Track multimedia contribution,L1-L2
+\mod_forum\event\course_searched,Forum,Student searches forum,"userid, other[]",Performance,Detect information-seeking behavior,L2
+\mod_forum\event\user_report_viewed,Forum,Teacher views user report,"objectid, relateduserid",N/A,N/A,L0
+\mod_workshop\event\course_module_viewed,Workshop,Student views workshop,"userid, contextinstanceid",Performance,Track workshop engagement,L1
+\mod_workshop\event\submission_created,Workshop,Student submits work,objectid,Performance,Track submission timing,L2
+\mod_workshop\event\submission_updated,Workshop,Student edits submission,objectid,Performance,Detect revision behavior,L2
+\mod_workshop\event\submission_deleted,Workshop,Submission removed,objectid,N/A,Audit,L0
+\mod_workshop\event\submission_viewed,Workshop,Student views submission,objectid,Reflection,Track peer work review,L2
+\mod_workshop\event\submission_assessed,Workshop,Peer assessment completed,"objectid, relateduserid, other[submissionid, grade]",Reflection,Analyze peer feedback quality; assess critical thinking,L3
+\mod_workshop\event\submission_reassessed,Workshop,Peer re-assesses submission,"objectid, relateduserid, other[submissionid, grade]",Reflection,Detect reassessment/refinement of judgment,L3
+\mod_workshop\event\assessment_evaluated,Workshop,System evaluates assessment quality,"objectid, other[currentgrade, weight]",Reflection,Assess peer assessment reliability,L2-L3
+\mod_workshop\event\assessment_reevaluated,Workshop,Assessment quality re-evaluated,"objectid, other[currentgrade, weight]",Reflection,Track calibration changes,L2
+\mod_workshop\event\assessment_evaluations_reset,Workshop,All evaluations reset,objectid,N/A,Audit,L0
+\mod_workshop\event\assessments_reset,Workshop,All assessments reset,objectid,N/A,Audit,L0
+\mod_workshop\event\phase_switched,Workshop,Workshop phase changes,"objectid, other[workshopphase]",Forethought,Notify students of phase transition,L2
+\mod_workshop\event\phase_automatically_switched,Workshop,Auto phase switch,"objectid, other[workshopphase]",Forethought,Trigger phase-appropriate guidance,L2
+\mod_workshop\event\assessable_uploaded,Workshop,Student uploads to workshop,"userid, contextinstanceid",Performance,Track file submission,L1
+\mod_lesson\event\lesson_started,Lesson,Student begins lesson,"userid, objectid",Performance,Track lesson engagement timing,L1-L2
+\mod_lesson\event\lesson_ended,Lesson,Student completes lesson,"userid, objectid",Performance/Reflection,Measure completion and duration,L2
+\mod_lesson\event\lesson_restarted,Lesson,Student restarts lesson,"userid, objectid",Reflection,Detect retry behavior (persistence),L2-L3
+\mod_lesson\event\lesson_resumed,Lesson,Student resumes lesson,"userid, objectid",Performance,Track return-to-task behavior,L2
+\mod_lesson\event\content_page_viewed,Lesson,Student views content page,"userid, objectid",Performance,Track navigation path through content,L1-L2
+\mod_lesson\event\question_viewed,Lesson,Student views question,"userid, objectid",Performance,Track question encounter,L1
+\mod_lesson\event\question_answered,Lesson,Student answers question,"userid, objectid, other[]",Performance,Analyze answer correctness and response time,L2-L3
+\mod_lesson\event\essay_assessed,Lesson,Teacher grades essay,"objectid, relateduserid",Reflection,Deliver qualitative feedback,L3
+\mod_lesson\event\essay_attempt_viewed,Lesson,Teacher views essay attempt,objectid,N/A,N/A,L0
+\mod_scorm\event\course_module_viewed,SCORM,Student views SCORM,userid,Performance,Track SCORM access,L1
+\mod_scorm\event\sco_launched,SCORM,Student launches SCO,"userid, objectid, other[loadedcontent]",Performance,Track which content objects accessed,L2
+\mod_scorm\event\scoreraw_submitted,SCORM,Score reported from SCORM,"userid, other[attemptid, cmielement, cmivalue]",Performance,Capture assessment scores from external content,L2-L3
+\mod_scorm\event\status_submitted,SCORM,Status reported from SCORM,"userid, other[attemptid, cmielement, cmivalue]",Performance,Track completion status,L2
+\mod_scorm\event\report_viewed,SCORM,Teacher views report,objectid,N/A,N/A,L0
+\mod_scorm\event\attempt_deleted,SCORM,Teacher deletes attempt,objectid,N/A,Audit,L0
+\core\event\user_graded,Grade,Grade recorded/updated,"relateduserid, other[itemid, overridden, finalgrade]",Reflection,Trigger grade notification; performance analysis,L2-L3
+\core\event\grade_deleted,Grade,Grade removed,objectid,N/A,Audit,L0
+\core\event\grade_item_created,Grade,New grade item added,"objectid, courseid",Forethought,Update student dashboards,L1
+\core\event\grade_report_viewed,Grade,Student/teacher views grades,"userid, courseid",Reflection,Detect grade-checking frequency (anxiety/monitoring),L2-L3
+\core\event\grade_exported,Grade,Teacher exports grades,"userid, courseid",N/A,N/A,L0
+\core\event\user_loggedin,User,User authenticates,userid,Performance,Track login frequency and session timing,L1-L2
+\core\event\user_loggedout,User,User logs out,userid,N/A,Track session duration,L1
+\core\event\user_loggedinas,User,Admin impersonates user,"userid, relateduserid",N/A,Audit,L0
+\core\event\user_login_failed,User,Failed login,userid,N/A,Security,L0
+\core\event\user_created,User,New user registered,objectid,N/A,Trigger onboarding,L1
+\core\event\user_updated,User,Profile updated,objectid,N/A,N/A,L0
+\core\event\user_deleted,User,User removed,objectid,N/A,N/A,L0
+\core\event\user_enrolment_created,User,User enrolled in course,"objectid, relateduserid, courseid",Forethought,Trigger welcome message; set initial goals,L2
+\core\event\user_enrolment_deleted,User,User unenrolled,"objectid, relateduserid",N/A,Track dropout,L2-L3
+\core\event\user_enrolment_updated,User,Enrolment modified,"objectid, relateduserid",N/A,Track status changes,L1
+\core\event\user_profile_viewed,User,Profile page visited,relateduserid,N/A,Track social awareness,L1
+\core\event\user_list_viewed,User,User list accessed,courseid,N/A,Track social navigation,L1
+\core\event\competency_viewed,Competency,Competency page viewed,objectid,Forethought,Track competency awareness,L1-L2
+\core\event\competency_user_competency_rated,Competency,Student competency rated,"objectid, relateduserid",Reflection,Deliver competency-based feedback,L3
+\core\event\competency_user_competency_rated_in_course,Competency,Rated in course context,"objectid, relateduserid",Reflection,Course-specific competency tracking,L3
+\core\event\competency_user_competency_viewed,Competency,Student views own competency,objectid,Reflection,Detect self-assessment behavior,L2-L3
+\core\event\competency_user_competency_viewed_in_course,Competency,Viewed in course,objectid,Reflection,Context-specific self-monitoring,L2-L3
+\core\event\competency_plan_created,Competency,Learning plan created,objectid,Forethought,Track goal-setting,L2-L3
+\core\event\competency_plan_approved,Competency,Learning plan approved,objectid,Forethought,Confirm plan acceptance,L2
+\core\event\competency_plan_completed,Competency,Learning plan completed,objectid,Reflection,Track goal achievement,L2-L3
+\core\event\competency_plan_viewed,Competency,Student views learning plan,objectid,Forethought/Reflection,Track planning engagement,L2-L3
+\core\event\competency_evidence_created,Competency,Evidence of competency added,objectid,Reflection,Track competency demonstration,L3
+\core\event\competency_framework_viewed,Competency,Framework viewed,objectid,Forethought,Track awareness of learning objectives,L2
+\core\event\message_sent,Messaging,User sends message,"userid, relateduserid",Performance,Track help-seeking behavior,L2-L3
+\core\event\message_viewed,Messaging,User reads message,"userid, relateduserid",N/A,Confirm message delivery,L1
+\core\event\message_deleted,Messaging,Message deleted,"userid, objectid",N/A,N/A,L0
+\core\event\group_message_sent,Messaging,Group message sent,userid,Performance,Track collaborative communication,L2
+\core\event\message_contact_added,Messaging,Contact added,"userid, relateduserid",N/A,Track social network formation,L1
+\core\event\message_contact_removed,Messaging,Contact removed,"userid, relateduserid",N/A,Track social network changes,L1
+\core\event\notification_sent,Messaging,System notification sent,"userid, relateduserid",N/A,Track notification delivery,L1
+\core\event\notification_viewed,Messaging,User reads notification,"userid, relateduserid",N/A,Confirm notification engagement,L1
+\mod_bigbluebuttonbn\event\meeting_created,BigBlueButton,Meeting room created,objectid,Forethought,Notify students,L1
+\mod_bigbluebuttonbn\event\meeting_joined,BigBlueButton,Student joins meeting,"userid, objectid",Performance,Track synchronous attendance,L2
+\mod_bigbluebuttonbn\event\meeting_left,BigBlueButton,Student leaves meeting,"userid, objectid",Performance,Track session duration,L2
+\mod_bigbluebuttonbn\event\meeting_ended,BigBlueButton,Meeting ended,objectid,N/A,Trigger post-meeting reflection,L2
+\mod_bigbluebuttonbn\event\live_session_event,BigBlueButton,In-session event,objectid,Performance,Track live engagement signals,L2
+\mod_bigbluebuttonbn\event\recording_viewed,BigBlueButton,Student views recording,"userid, objectid",Reflection,Track async review of sync content,L2-L3
+\mod_bigbluebuttonbn\event\recording_published,BigBlueButton,Recording made available,objectid,N/A,Notify students,L1
+\mod_h5pactivity\event\statement_received,H5P Activity,xAPI statement from H5P,"userid, objectid, other[]",Performance,Process granular interaction data from H5P,L2-L3
+\mod_h5pactivity\event\report_viewed,H5P Activity,Teacher views report,"objectid, relateduserid",N/A,N/A,L0
+\mod_data\event\record_created,Database,Student creates record,objectid,Performance,Track data contribution,L2
+\mod_data\event\record_updated,Database,Student edits record,objectid,Performance,Track revision behavior,L2
+\mod_data\event\record_deleted,Database,Record removed,objectid,N/A,Audit,L0
+\mod_glossary\event\entry_created,Glossary,Student adds entry,objectid,Performance,Track knowledge contribution,L2-L3
+\mod_glossary\event\entry_updated,Glossary,Student edits entry,objectid,Reflection,Track refinement,L2
+\mod_glossary\event\entry_viewed,Glossary,Student views entry,objectid,Performance,Track knowledge consumption,L1
+\mod_glossary\event\entry_approved,Glossary,Teacher approves entry,objectid,N/A,Notify student,L1
+\mod_glossary\event\entry_disapproved,Glossary,Teacher disapproves entry,objectid,N/A,Notify student; suggest revision,L2
+\mod_wiki\event\page_created,Wiki,Student creates page,objectid,Performance,Track collaborative creation,L2-L3
+\mod_wiki\event\page_updated,Wiki,Student edits page,objectid,Performance/Reflection,Track collaborative revision,L2-L3
+\mod_wiki\event\page_viewed,Wiki,Student views page,objectid,Performance,Track knowledge access,L1
+\mod_wiki\event\page_version_viewed,Wiki,Student views page version,objectid,Reflection,Track version comparison (metacognition),L2-L3
+\mod_wiki\event\page_diff_viewed,Wiki,Student views diff between versions,objectid,Reflection,Track change awareness,L2-L3
+\mod_wiki\event\page_history_viewed,Wiki,Student views edit history,objectid,Reflection,Track metacognitive history review,L2-L3
+\mod_wiki\event\page_map_viewed,Wiki,Student views page map,objectid,Forethought,Track structural understanding,L2
+\mod_wiki\event\page_deleted,Wiki,Page deleted,objectid,N/A,Audit,L0
+\mod_wiki\event\page_version_deleted,Wiki,Version deleted,objectid,N/A,Audit,L0
+\mod_wiki\event\page_version_restored,Wiki,Version restored,objectid,Reflection,Track version management,L2
+\mod_wiki\event\page_locks_deleted,Wiki,Page locks cleared,objectid,N/A,N/A,L0
+\core\event\badge_awarded,Badge,Badge earned by student,"objectid, relateduserid",Reflection,Celebrate achievement; recommend next badge,L2-L3
+\core\event\badge_viewed,Badge,Student views badge,objectid,Reflection,Track achievement awareness,L2
+\core\event\badge_listing_viewed,Badge,Student views badge gallery,userid,Forethought,Track goal awareness,L2
+\core\event\badge_revoked,Badge,Badge removed from user,"objectid, relateduserid",N/A,Notify student,L1
+\mod_book\event\chapter_viewed,Book,Student reads chapter,objectid,Performance,Track reading progress,L1-L2
+\mod_book\event\chapter_created,Book,Teacher creates chapter,objectid,N/A,N/A,L0
+\mod_book\event\chapter_updated,Book,Teacher edits chapter,objectid,N/A,N/A,L0
+\mod_book\event\chapter_deleted,Book,Teacher deletes chapter,objectid,N/A,N/A,L0
+\mod_choice\event\answer_created,Choice,Student makes choice,"objectid, other[choiceid, optionid]",Performance,Track decision-making,L1-L2
+\mod_choice\event\answer_updated,Choice,Student changes choice,"objectid, other[choiceid, optionid]",Reflection,Track decision revision,L2
+\mod_choice\event\answer_deleted,Choice,Choice answer deleted,objectid,N/A,Audit,L0
+\mod_choice\event\report_viewed,Choice,Teacher views results,objectid,N/A,N/A,L0
+\mod_feedback\event\response_submitted,Feedback,Student submits feedback,"objectid, relateduserid, other[anonymous]",Reflection,Analyze course feedback for improvement,L2-L3
+\mod_feedback\event\response_deleted,Feedback,Response removed,objectid,N/A,Audit,L0
+\mod_folder\event\all_files_downloaded,Folder,All folder files downloaded,userid,Performance,Track bulk download (preparation),L1-L2
+\mod_folder\event\folder_updated,Folder,Folder contents changed,objectid,N/A,N/A,L0
+\core\event\calendar_event_created,Calendar,Calendar event created,"objectid, userid",Forethought,Detect study planning behavior,L2
+\core\event\calendar_event_updated,Calendar,Calendar event modified,"objectid, userid",Forethought,Track planning adjustments,L2
+\core\event\calendar_event_deleted,Calendar,Calendar event removed,"objectid, userid",N/A,Audit,L0
+\core\event\blog_entry_created,Blog,Blog entry created,"objectid, userid",Reflection,Detect reflective journaling,L2-L3
+\core\event\blog_entry_updated,Blog,Blog entry edited,"objectid, userid",Reflection,Track reflection refinement,L2
+\core\event\blog_entry_deleted,Blog,Blog entry removed,objectid,N/A,Audit,L0
+\core\event\comment_created,Comment,Comment posted on content,"objectid, userid",Performance,Track engagement with content,L1-L2
+\core\event\comment_deleted,Comment,Comment removed,objectid,N/A,Audit,L0
+\core\event\note_created,Note,Teacher creates note about student,"objectid, relateduserid",N/A,At-risk identification data,L2
+\core\event\note_updated,Note,Teacher edits note,"objectid, relateduserid",N/A,At-risk tracking,L2
+\core\event\note_deleted,Note,Teacher deletes note,objectid,N/A,Audit,L0
+\core\event\group_member_added,Group,Student added to group,"objectid, relateduserid",N/A,Track group formation,L1
+\core\event\group_member_removed,Group,Student removed from group,"objectid, relateduserid",N/A,Track group changes,L1
+\core\event\group_created,Group,New group created,objectid,N/A,N/A,L0
+\core\event\tag_added,Tag,Tag added to content,objectid,N/A,Track knowledge organization,L1
+\core\event\tag_removed,Tag,Tag removed from content,objectid,N/A,N/A,L0
+\core\event\search_results_viewed,Search,Search results viewed,userid,Performance,Track information-seeking behavior,L2
+\core\event\recent_activity_viewed,Activity,Recent activity page viewed,userid,Performance,Track engagement monitoring,L1-L2
+\core\event\dashboard_viewed,Dashboard,User views dashboard,userid,Performance,Track platform engagement,L1
+\core\event\mycourses_viewed,Dashboard,User views my courses,userid,Forethought,Track course overview engagement,L1
+\core\event\section_viewed,Course,Section accessed,"userid, courseid",Performance,Track content navigation,L1
+\core\event\role_assigned,Role,Role assigned to user,"objectid, relateduserid",N/A,Track responsibility changes,L1
+\core\event\role_unassigned,Role,Role removed from user,"objectid, relateduserid",N/A,Track responsibility changes,L1
+\core\event\contentbank_content_viewed,Content Bank,Content bank item viewed,"userid, objectid",Performance,Track content engagement,L1
+\core\event\h5p_viewed,H5P,H5P content viewed,"userid, objectid",Performance,Track interactive content access,L1-L2
