@@ -10,7 +10,7 @@
 
 ## Formal Scoring Rubric for Platform Readiness Evaluation
 
-**Framework:** STAIR (Scaffold for Teaching Agent Reasoning Readiness)
+**Framework:** STAIR (Scaffold for Teaching Agent Integration Readiness)
 **Version:** 1.0
 **Author:** Baqar Jafri, University of Stirling
 **Date:** March 2026

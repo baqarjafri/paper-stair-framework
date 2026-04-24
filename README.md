@@ -1,6 +1,6 @@
 # STAIR — Reproducibility Repository
 
-*Scaffold for Teaching Agent Reasoning Readiness — Evaluating Moodle's Architecture for AI Teaching Agent Reasoning*
+*Scaffold for Teaching Agent Integration Readiness — Evaluating Moodle's Architecture for AI Teaching Agent Reasoning*
 
 **Paper:** AITHE 2026, Swansea, UK (July 1–3, 2026) — AHEAD stream
 **Author:** Baqar Jafri, University of Stirling

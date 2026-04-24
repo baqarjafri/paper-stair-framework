@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this analysis or the STAIR framework in your research, please cite as below."
-title: "STAIR: Scaffold for Teaching Agent Reasoning Readiness — Evaluating Moodle's Architecture for AI Teaching Agent Reasoning"
+title: "STAIR: Scaffold for Teaching Agent Integration Readiness — Evaluating Moodle's Architecture for AI Teaching Agent Reasoning"
 authors:
   - family-names: "Jafri"
     given-names: "Baqar"
@@ -21,7 +21,7 @@ keywords:
   - "STAIR framework"
 preferred-citation:
   type: conference-paper
-  title: "STAIR: Scaffold for Teaching Agent Reasoning Readiness — Evaluating Moodle's Architecture for AI Teaching Agent Reasoning"
+  title: "STAIR: Scaffold for Teaching Agent Integration Readiness — Evaluating Moodle's Architecture for AI Teaching Agent Reasoning"
   authors:
     - family-names: "Jafri"
       given-names: "Baqar"
