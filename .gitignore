@@ -74,3 +74,8 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+.gstack/
+
+# Presentation working files (script, Q&A pack, blueprint, deck sources). The public
+# deliverables (PPTX, PDF, slide images) are copied into docs/ for the paper page.
+presentation/

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STAIR: A Five-Level Framework for Evaluating LMS Readiness for Agentic AI Teaching Agents</title>
+<meta name="description" content="Paper page for STAIR (AITHE 2026, Swansea). Applying a five-level readiness framework to Moodle 5.2dev+ reveals a 28-percentage-point cliff between student-state infrastructure (53%) and agent-reasoning infrastructure (25%), caused by code-level isolation between the AI and analytics subsystems. Interactive findings, talk video, slides, code and citation.">
+<link rel="canonical" href="https://baqarjafri.github.io/paper-stair-framework/">
+<meta name="theme-color" content="#FBFBF9">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="STAIR framework">
+<meta property="og:title" content="STAIR: A Five-Level Framework for Evaluating LMS Readiness for Agentic AI Teaching Agents">
+<meta property="og:description" content="AITHE 2026 paper. Moodle scores 55 and 53 at the data levels, then 25 at agent reasoning: a 28-point cliff caused by zero code connecting its AI subsystem to its analytics. Talk, interactive findings, code, citation.">
+<meta property="og:url" content="https://baqarjafri.github.io/paper-stair-framework/">
+<meta property="og:image" content="https://baqarjafri.github.io/paper-stair-framework/assets/og_card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="STAIR readiness profile of Moodle: 55, 53, 25, 5, 22 with a 28-point cliff at the reasoning level.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="STAIR: A Five-Level Framework for Evaluating LMS Readiness for Agentic AI Teaching Agents">
+<meta name="twitter:description" content="AITHE 2026 paper. A 28-point readiness cliff in Moodle between student-state and agent-reasoning infrastructure, measured from source.">
+<meta name="twitter:image" content="https://baqarjafri.github.io/paper-stair-framework/assets/og_card.png">
+<link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/sourceserif-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/plexmono-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"Person","@id":"https://orcid.org/0009-0007-3204-0460","name":"Baqar Jafri","affiliation":{"@type":"CollegeOrUniversity","name":"University of Stirling"},"email":"baqar@nexgenclass.com","sameAs":["https://orcid.org/0009-0007-3204-0460","https://github.com/baqarjafri","https://www.youtube.com/@thebaqarjafri"]},
+{"@type":"ScholarlyArticle","@id":"https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7134838","headline":"STAIR: A Five-Level Framework for Evaluating LMS Readiness for Agentic AI Teaching Agents","author":{"@id":"https://orcid.org/0009-0007-3204-0460"},"datePublished":"2026-07","isPartOf":{"@type":"Periodical","name":"Proceedings of AITHE 2026, Artificial Intelligence and the Transformation of Higher Education Symposium"},"locationCreated":{"@type":"Place","name":"Swansea, United Kingdom"},"license":"https://creativecommons.org/licenses/by/4.0/","url":"https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7134838","sameAs":["https://github.com/baqarjafri/paper-stair-framework"]},
+{"@type":"VideoObject","@id":"https://www.youtube.com/watch?v=IOQ33vkTfSk","name":"STAIR Framework: Measuring LMS Readiness for Agentic AI Teaching Agents","description":"AITHE 2026 talk by Baqar Jafri. Moodle scored on five levels of AI teaching-agent readiness: it clears the data levels and collapses at reasoning.","thumbnailUrl":"https://img.youtube.com/vi/IOQ33vkTfSk/maxresdefault.jpg","uploadDate":"2026-08-31T14:11:41-07:00","duration":"PT18M43S","embedUrl":"https://www.youtube-nocookie.com/embed/IOQ33vkTfSk","contentUrl":"https://www.youtube.com/watch?v=IOQ33vkTfSk","author":{"@id":"https://orcid.org/0009-0007-3204-0460"}},
+{"@type":"WebPage","name":"STAIR: A Five-Level Framework for Evaluating LMS Readiness for Agentic AI Teaching Agents","url":"https://baqarjafri.github.io/paper-stair-framework/","about":{"@id":"https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7134838"},"author":{"@id":"https://orcid.org/0009-0007-3204-0460"},"video":{"@id":"https://www.youtube.com/watch?v=IOQ33vkTfSk"}}
+]}
+</script>
+<script defer src="assets/site-data.js"></script>
+<script defer src="assets/site.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top"><div class="wrap">
+  <a class="brand" href="#top"><b>STAIR</b><span>AITHE 2026 &middot; paper page</span></a>
+  <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav-list">Menu</button>
+  <nav aria-label="Sections"><ul id="nav-list">
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#talk">Talk</a></li>
+    <li><a href="#findings">Findings</a></li>
+    <li><a href="#method">Method</a></li>
+    <li><a href="#limits">Limitations</a></li>
+    <li><a href="#cite">Cite</a></li>
+    <li><a class="pill" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7134838">Paper (SSRN)</a></li>
+  </ul></nav>
+</div></header>
+
+<main id="main">
+
+<section class="title" id="top" aria-labelledby="h1"><div class="wrap">
+  <p class="kicker">AITHE 2026 &middot; Artificial Intelligence and the Transformation of Higher Education Symposium &middot; Swansea University &middot; 1 to 3 July 2026</p>
+  <h1 id="h1">STAIR: A Five-Level Framework for Evaluating LMS Readiness for Agentic AI Teaching Agents</h1>
+  <p class="authors"><b>Baqar Jafri</b></p>
+  <p class="affil">University of Stirling, Computing Science and Mathematics &middot; <a href="https://orcid.org/0009-0007-3204-0460">ORCID 0009-0007-3204-0460</a> &middot; <a href="mailto:baqar@nexgenclass.com">baqar@nexgenclass.com</a></p>
+  <div class="links">
+    <a class="btn primary" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7134838"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/></svg>Paper (SSRN)</a>
+    <a class="btn" href="downloads/Paper_1_STAIR_AITHE2026.pdf">PDF</a>
+    <a class="btn" href="https://github.com/baqarjafri/paper-stair-framework"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>Code &amp; data</a>
+    <a class="btn" href="#talk" data-play><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Talk (19 min)</a>
+    <a class="btn" href="#slides-viewer">Slides</a>
+    <a class="btn" href="https://zenodo.org/records/21429295">Zenodo</a>
+    <a class="btn" href="#cite">BibTeX</a>
+  </div>
+</div></section>
+
+<section class="abstract-wrap" id="abstract" aria-labelledby="abs-h"><div class="narrow">
+  <h2 id="abs-h" class="visually-hidden">Abstract</h2>
+  <p class="abstract"><span class="lab">Abstract.</span>Autonomous AI teaching agents promise personalised instruction at scale, but the learning management systems that would host them were designed for human workflows, not agentic ones. This paper shows the mismatch is not a matter of capability but of architecture. Applying a new five-level readiness framework, STAIR (Scaffold for Teaching Agent Integration Readiness), to Moodle 5.2dev+ reveals a 28-percentage-point cliff between student-state infrastructure (53%) and agent-reasoning infrastructure (25%). The cause is code-level isolation between the platform's AI and analytics subsystems. STAIR derives its levels from converging requirements in Zimmerman's self-regulated learning cycle, Talebirad and Nadiri's multi-agent collaboration architecture, and a recent educational LLM agent taxonomy. The framework operationalises these into 28 sub-dimensions, each scored against an evidence-linked rubric through systematic source-code analysis. Moodle scores 55% at event sensing (L1) and 53% at student state (L2) but falls to 25% at agent reasoning (L3), 5% at orchestration (L4), and 22% at intervention delivery (L5). The platform provides no native support for autonomous agent coordination or pedagogically timed response. Until learning management systems bridge language-model reasoning and learner data, the field's growing investment in educational AI remains structurally stranded. The ceiling is set by the architecture of the host platforms, not by the capability of the models.</p>
+  <p class="keywords">Keywords: STAIR framework &middot; learning management systems &middot; AI teaching agents &middot; self-regulated learning &middot; agent architecture &middot; Moodle &middot; platform readiness</p>
+</div></section>
+
+<section class="talk" id="talk" aria-labelledby="talk-h"><div class="wrap"><div class="g">
+  <div>
+    <h2 id="talk-h" class="visually-hidden">Talk and slides</h2>
+    <div class="frame" id="video-slot">
+      <button class="facade" id="video-facade" type="button" aria-label="Play the talk, 19 minutes, in this frame">
+        <img src="assets/talk_thumb.jpg" width="1280" height="720" alt="">
+        <span class="play" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="#13161B"><path d="M8 5v14l11-7z"/></svg></span></span>
+      </button>
+    </div>
+    <p class="vmeta"><span>The AITHE 2026 talk &middot; STAIR Framework: Measuring LMS Readiness for Agentic AI Teaching Agents</span><span>18:43 &middot; <a href="https://www.youtube.com/watch?v=IOQ33vkTfSk">YouTube</a></span></p>
+    <div class="viewer" id="slides-viewer" role="region" aria-roledescription="carousel" aria-label="Presentation slides" tabindex="0">
+      <img id="slide-img" src="assets/slides/slide_01.png" width="1920" height="1080" alt="Slide 1 of 20: Title: STAIR, a five-level framework for evaluating LMS readiness for agentic AI teaching agents">
+      <div class="controls"><button type="button" id="slide-prev" aria-label="Previous slide">&larr; Prev</button><span id="slide-count" aria-live="polite">1 / 20</span><button type="button" id="slide-next" aria-label="Next slide">Next &rarr;</button><button type="button" id="slide-full">Fullscreen</button></div>
+    </div>
+    <div class="strip" role="group" aria-label="Slide thumbnails">
+      <button class="thumb on" type="button" data-slide="1" aria-label="Go to slide 1"><img src="assets/slides/slide_01.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="2" aria-label="Go to slide 2"><img src="assets/slides/slide_02.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="3" aria-label="Go to slide 3"><img src="assets/slides/slide_03.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="4" aria-label="Go to slide 4"><img src="assets/slides/slide_04.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="5" aria-label="Go to slide 5"><img src="assets/slides/slide_05.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="6" aria-label="Go to slide 6"><img src="assets/slides/slide_06.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="7" aria-label="Go to slide 7"><img src="assets/slides/slide_07.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="8" aria-label="Go to slide 8"><img src="assets/slides/slide_08.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="9" aria-label="Go to slide 9"><img src="assets/slides/slide_09.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="10" aria-label="Go to slide 10"><img src="assets/slides/slide_10.png" width="1920" height="1080" alt="" loading="lazy"></button>
+      <button class="thumb" type="button" data-slide="11" aria-label="Go to slide 11"><img src="assets/slides/slide_11.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="12" aria-label="Go to slide 12"><img src="assets/slides/slide_12.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="13" aria-label="Go to slide 13"><img src="assets/slides/slide_13.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="14" aria-label="Go to slide 14"><img src="assets/slides/slide_14.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="15" aria-label="Go to slide 15"><img src="assets/slides/slide_15.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="16" aria-label="Go to slide 16"><img src="assets/slides/slide_16.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="17" aria-label="Go to slide 17"><img src="assets/slides/slide_17.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="18" aria-label="Go to slide 18"><img src="assets/slides/slide_18.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="19" aria-label="Go to slide 19"><img src="assets/slides/slide_19.png" width="1920" height="1080" alt="" loading="lazy"></button><button class="thumb" type="button" data-slide="20" aria-label="Go to slide 20"><img src="assets/slides/slide_20.png" width="1920" height="1080" alt="" loading="lazy"></button>
+    </div>
+    <p class="vmeta"><span>20 slides &middot; select a thumbnail</span><span>&larr; &rarr; keys &middot; F fullscreen</span></p>
+  </div>
+  <aside class="side" aria-labelledby="side-h">
+    <h2 id="side-h">Watch, read, run</h2>
+    <ul class="dl">
+      <li><div><b>Paper</b><span>SSRN 7134838 &middot; PDF in the repository</span></div><a class="act" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7134838">SSRN</a></li>
+      <li><div><b>Slides</b><span>PPTX (text-selectable) &middot; PDF &middot; Zenodo DOI 10.5281/zenodo.21429295</span></div><a class="act" href="downloads/AITHE2026_Presentation_Jafri.pptx">PPTX</a></li>
+      <li><div><b>Code and data</b><span>github.com/baqarjafri/paper-stair-framework &middot; one command reproduces every number</span></div><a class="act" href="https://github.com/baqarjafri/paper-stair-framework">GitHub</a></li>
+      <li><div><b>Scoring explorer</b><span>28 checks, rubric, evidence and file paths</span></div><a class="act" href="methodology_explorer.html">Open</a></li>
+    </ul>
+    <p class="tldr"><b>In one sentence:</b> Moodle can see which students are struggling and can generate help, but the two subsystems share no code, so an autonomous teaching agent has nowhere to stand.</p>
+  </aside>
+</div></div></section>
+
+<section class="findings" id="findings" aria-labelledby="find-h"><div class="wrap">
+  <div class="sec-h"><span class="n">CORE FINDINGS</span><h2 id="find-h">What the paper found</h2></div>
+  <p class="muted lead">Four findings carry the paper. Each chart is built from the repository's data files; hover and select to inspect the numbers behind it.</p>
+
+  <article class="finding" id="f1" aria-labelledby="f1-h">
+    <div class="txt">
+      <span class="kicker">Finding 1 &middot; the readiness profile</span>
+      <h3 id="f1-h">Readiness does not decline gradually. It drops <em><b data-check="claims.cliff">28</b> points</em> between the data levels and the reasoning level.</h3>
+      <p>Moodle 5.2dev+ scores 55% at event sensing and 53% at student state, then 25% at agent reasoning, 5% at orchestration and 22% at intervention delivery. The fall between L2 and L3 is a discontinuity, not a slope.</p>
+      <p class="ref">Paper &sect;5, Table 3, Figure 1 &middot; <a href="https://github.com/baqarjafri/paper-stair-framework/blob/main/analysis/data/table3_derived.json">table3_derived.json</a> &middot; <a href="https://github.com/baqarjafri/paper-stair-framework/blob/main/figures/fig_abstract_graphical.png">Figure 1 as published</a></p>
+    </div>
+    <div class="card">
+      <p class="ct">STAIR readiness profile, Moodle 5.2dev+ (Build 20260320)</p>
+      <p class="cs">Bar = per-level readiness, 0 to 100. Colour = achievability band. Hover a bar for its five dimensions; select it to pin the breakdown.</p>
+      <div class="chart-wrap">
+        <svg id="c1" viewBox="0 0 900 330" role="img" aria-label="Readiness profile: L1 Event Sensing 55, L2 Student State 53, L3 Agent Reasoning 25, L4 Orchestration 5, L5 Intervention Delivery 22 percent. A 28-point cliff between L2 and L3.">
+          <g class="grid" aria-hidden="true">
+            <line x1="70" y1="30" x2="880" y2="30" stroke="#E4E4DE" stroke-dasharray="3 4"/><text x="58" y="34" text-anchor="end">100%</text>
+            <line x1="70" y1="90" x2="880" y2="90" stroke="#E4E4DE" stroke-dasharray="3 4"/><text x="58" y="94" text-anchor="end">75%</text>
+            <line x1="70" y1="150" x2="880" y2="150" stroke="#E4E4DE" stroke-dasharray="3 4"/><text x="58" y="154" text-anchor="end">50%</text>
+            <line x1="70" y1="210" x2="880" y2="210" stroke="#E4E4DE" stroke-dasharray="3 4"/><text x="58" y="214" text-anchor="end">25%</text>
+            <line x1="70" y1="270" x2="880" y2="270" stroke="#2A2E35" stroke-width="1.5"/>
+          </g>
+          <g class="bar" data-level="L1" tabindex="0" role="button" aria-label="L1 Event Sensing, 55 percent, ready. Show its five dimensions."><rect class="hit" x="90" y="30" width="140" height="290"/><rect class="col" x="105" y="138" width="110" height="132" fill="#4F7D12"/><text class="val" x="160" y="128" fill="#3B5F0C" data-check="L1.score">55</text><text class="lab" x="160" y="292" fill="#3B5F0C">L1</text><text class="lab2" x="160" y="312">Event Sensing</text></g>
+          <g class="bar" data-level="L2" tabindex="0" role="button" aria-label="L2 Student State, 53 percent, ready. Show its five dimensions."><rect class="hit" x="250" y="30" width="140" height="290"/><rect class="col" x="265" y="142.8" width="110" height="127.2" fill="#4F7D12"/><text class="val" x="320" y="133" fill="#3B5F0C" data-check="L2.score">53</text><text class="lab" x="320" y="292" fill="#3B5F0C">L2</text><text class="lab2" x="320" y="312">Student State</text></g>
+          <g class="bar" data-level="L3" tabindex="0" role="button" aria-label="L3 Agent Reasoning, 25 percent, limited. Show its five dimensions."><rect class="hit" x="410" y="30" width="140" height="290"/><rect class="col" x="425" y="210" width="110" height="60" fill="#B5651D"/><text class="val" x="480" y="200" fill="#8A4A12" data-check="L3.score">25</text><text class="lab" x="480" y="292" fill="#8A4A12">L3</text><text class="lab2" x="480" y="312">Agent Reasoning</text></g>
+          <g class="bar" data-level="L4" tabindex="0" role="button" aria-label="L4 Orchestration, 5 percent, critical. Show its five dimensions."><rect class="hit" x="570" y="30" width="140" height="290"/><rect class="col" x="585" y="258" width="110" height="12" fill="#9B1C2C"/><text class="val" x="640" y="248" fill="#9B1C2C" data-check="L4.score">5</text><text class="lab" x="640" y="292" fill="#9B1C2C">L4</text><text class="lab2" x="640" y="312">Orchestration</text></g>
+          <g class="bar" data-level="L5" tabindex="0" role="button" aria-label="L5 Intervention Delivery, 22 percent, limited. Show its five dimensions."><rect class="hit" x="730" y="30" width="140" height="290"/><rect class="col" x="745" y="217.2" width="110" height="52.8" fill="#B5651D"/><text class="val" x="800" y="207" fill="#8A4A12" data-check="L5.score">22</text><text class="lab" x="800" y="292" fill="#8A4A12">L5</text><text class="lab2" x="800" y="312">Intervention Delivery</text></g>
+          <g class="anno" aria-hidden="true"><line x1="400" y1="143" x2="400" y2="204" stroke="#D8232A" stroke-width="2.5" stroke-dasharray="6 5"/><path d="M400 210 l-6 -10 h12z" fill="#D8232A"/><rect x="410" y="160" width="150" height="28" rx="5" fill="#FCE7EA" stroke="#D8232A" stroke-width="1.5"/><text x="485" y="179" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-weight="700" font-size="14" fill="#B0121F">&#9660; 28-point cliff</text></g>
+        </svg>
+        <div class="tip" id="c1tip" role="tooltip" hidden></div>
+      </div>
+      <div class="dimpanel" id="c1panel" aria-live="polite" hidden></div>
+      <details class="t3">
+        <summary>Table 3 as published: five consolidated dimensions per level</summary>
+        <table>
+          <thead><tr><th>Level</th><th>COV</th><th>ACC</th><th>EDU</th><th>TMP</th><th>INT</th><th>Mean</th></tr></thead>
+          <tbody>
+            <tr><td>L1 Event Sensing</td><td data-check="L1.COV">75</td><td data-check="L1.ACC">50</td><td data-check="L1.EDU">50</td><td data-check="L1.TMP">25</td><td data-check="L1.INT">75</td><td class="mean" data-check="L1.mean">55</td></tr>
+            <tr><td>L2 Student State</td><td data-check="L2.COV">75</td><td data-check="L2.ACC">75</td><td data-check="L2.EDU">25</td><td data-check="L2.TMP">50</td><td data-check="L2.INT">38</td><td class="mean" data-check="L2.mean">53</td></tr>
+            <tr class="cliff"><td>L3 Agent Reasoning</td><td data-check="L3.COV">50</td><td data-check="L3.ACC">50</td><td class="z" data-check="L3.EDU">0</td><td data-check="L3.TMP">25</td><td class="z" data-check="L3.INT">0</td><td class="mean" data-check="L3.mean">25</td></tr>
+            <tr><td>L4 Orchestration</td><td class="z" data-check="L4.COV">0</td><td class="z" data-check="L4.ACC">0</td><td class="z" data-check="L4.EDU">0</td><td class="z" data-check="L4.TMP">0</td><td data-check="L4.INT">25</td><td class="mean" data-check="L4.mean">5</td></tr>
+            <tr><td>L5 Intervention Delivery</td><td data-check="L5.COV">50</td><td data-check="L5.ACC">25</td><td data-check="L5.EDU">12</td><td class="z" data-check="L5.TMP">0</td><td data-check="L5.INT">25</td><td class="mean" data-check="L5.mean">22</td></tr>
+          </tbody>
+        </table>
+        <p class="tnote">COV = coverage and classification; ACC = external accessibility; EDU = educational specificity; TMP = temporal availability; INT = cross-subsystem integration. Each cell is the weighted mean of its contributing sub-dimensions (raw 0 to 4 scores convert to 0/25/50/75/100); where two jointly define a dimension, each carries half-weight. Level readiness is the equal-weight mean of the five cells.</p>
+      </details>
+    </div>
+  </article>
+
+  <article class="finding wide" id="f2" aria-labelledby="f2-h">
+    <div class="txt">
+      <div><span class="kicker">Finding 2 &middot; where it breaks</span>
+      <h3 id="f2-h">Two of L3's five dimensions score <em>zero</em>: no reasoning pipeline, no AI-to-analytics bridge.</h3></div>
+      <div><p>Of 28 checks, nine are absent from the Moodle source. Three of them sit at L3 (agent identity model, reasoning pipeline, AI-analytics bridge) and pull the level to 25%. L4 has four absences; L5 has none of the timing intelligence an intervention needs.</p>
+      <p class="ref">Paper &sect;5.3, Figure 4 &middot; <a href="https://github.com/baqarjafri/paper-stair-framework/blob/main/analysis/data/moodle_scores.json">moodle_scores.json</a> &middot; <a href="https://github.com/baqarjafri/paper-stair-framework/blob/main/analysis/instruments/STAIR_SCORING_INSTRUMENT.md">scoring instrument</a> &middot; <a href="https://github.com/baqarjafri/paper-stair-framework/blob/main/figures/fig4_gap_analysis.png">Figure 4 as published</a></p></div>
+    </div>
+    <div class="card">
+      <p class="ct">All <span data-check="claims.subs">28</span> sub-dimension scores</p>
+      <p class="cs">Dot position = score (0 absent to 4 ready). Colour = parent level band. Select a row to read what was checked and what was found.</p>
+      <div class="f2">
+        <div>
+          <div class="axis" aria-hidden="true"><span></span><span class="ticks"><span>Absent</span><span>Nascent</span><span>Partial</span><span>Substantial</span><span>Ready</span></span><span></span></div>
+          <div class="rows" id="rows">
+            <div class="lvlbar g"><span>L1 &middot; Event Sensing</span><span><b data-check="L1.score.banner">55</b>% ready</span></div>
+            <button class="row g" type="button" data-sub="1.1_Event_Coverage" aria-pressed="false"><span class="lab"><b>1.1</b> Event Coverage</span><span class="track" aria-hidden="true"><i style="width:75%"></i><u style="left:75%"></u></span><span class="sc" data-check="1.1_Event_Coverage">3</span></button>
+            <button class="row g" type="button" data-sub="1.2_Observer_Subscription" aria-pressed="false"><span class="lab"><b>1.2</b> Observer Subscription</span><span class="track" aria-hidden="true"><i style="width:50%"></i><u style="left:50%"></u></span><span class="sc" data-check="1.2_Observer_Subscription">2</span></button>
+            <button class="row g" type="button" data-sub="1.3_SRL_Phase_Observability" aria-pressed="false"><span class="lab"><b>1.3</b> SRL Phase Observability</span><span class="track" aria-hidden="true"><i style="width:50%"></i><u style="left:50%"></u></span><span class="sc" data-check="1.3_SRL_Phase_Observability">2</span></button>
+            <button class="row g" type="button" data-sub="1.4_Real_Time_External_Access" aria-pressed="false"><span class="lab"><b>1.4</b> Real-Time External Access</span><span class="track" aria-hidden="true"><i style="width:25%"></i><u style="left:25%"></u></span><span class="sc" data-check="1.4_Real_Time_External_Access">1</span></button>
+            <button class="row g" type="button" data-sub="1.5_Event_Enrichment" aria-pressed="false"><span class="lab"><b>1.5</b> Event Enrichment</span><span class="track" aria-hidden="true"><i style="width:75%"></i><u style="left:75%"></u></span><span class="sc" data-check="1.5_Event_Enrichment">3</span></button>
+            <div class="lvlbar g"><span>L2 &middot; Student State</span><span><b data-check="L2.score.banner">53</b>% ready</span></div>
+            <button class="row g" type="button" data-sub="2.1_Raw_Data_Availability" aria-pressed="false"><span class="lab"><b>2.1</b> Raw Data Availability</span><span class="track" aria-hidden="true"><i style="width:75%"></i><u style="left:75%"></u></span><span class="sc" data-check="2.1_Raw_Data_Availability">3</span></button>
+            <button class="row g" type="button" data-sub="2.2_Analytics_Framework" aria-pressed="false"><span class="lab"><b>2.2</b> Analytics Framework</span><span class="track" aria-hidden="true"><i style="width:75%"></i><u style="left:75%"></u></span><span class="sc" data-check="2.2_Analytics_Framework">3</span></button>
+            <button class="row g" type="button" data-sub="2.3_Unified_Learner_Model" aria-pressed="false"><span class="lab"><b>2.3</b> Unified Learner Model</span><span class="track" aria-hidden="true"><i style="width:25%"></i><u style="left:25%"></u></span><span class="sc" data-check="2.3_Unified_Learner_Model">1</span></button>
+            <button class="row g" type="button" data-sub="2.4_API_Query_Capability" aria-pressed="false"><span class="lab"><b>2.4</b> API Query Capability</span><span class="track" aria-hidden="true"><i style="width:75%"></i><u style="left:75%"></u></span><span class="sc" data-check="2.4_API_Query_Capability">3</span></button>
+            <button class="row g" type="button" data-sub="2.5_Temporal_Analytics" aria-pressed="false"><span class="lab"><b>2.5</b> Temporal Analytics</span><span class="track" aria-hidden="true"><i style="width:50%"></i><u style="left:50%"></u></span><span class="sc" data-check="2.5_Temporal_Analytics">2</span></button>
+            <button class="row g" type="button" data-sub="2.6_Privacy_Aware_Access" aria-pressed="false"><span class="lab"><b>2.6</b> Privacy-Aware Access</span><span class="track" aria-hidden="true"><i style="width:50%"></i><u style="left:50%"></u></span><span class="sc" data-check="2.6_Privacy_Aware_Access">2</span></button>
+            <div class="cliffband">&#9660; 28-point readiness cliff between L2 (53%) and L3 (25%) &#9660;</div>
+            <div class="lvlbar a"><span>L3 &middot; Agent Reasoning</span><span><b data-check="L3.score.banner">25</b>% ready</span></div>
+            <button class="row a" type="button" data-sub="3.1_AI_Subsystem_Infrastructure" aria-pressed="false"><span class="lab"><b>3.1</b> AI Subsystem Infrastructure</span><span class="track" aria-hidden="true"><i style="width:50%"></i><u style="left:50%"></u></span><span class="sc" data-check="3.1_AI_Subsystem_Infrastructure">2</span></button>
+            <button class="row a" type="button" data-sub="3.2_Agent_Identity_Model" aria-pressed="false"><span class="lab"><b>3.2</b> Agent Identity Model</span><span class="track" aria-hidden="true"><u class="abs" style="left:0"></u></span><span class="sc abs"><b data-check="3.2_Agent_Identity_Model">0</b> Absent</span></button>
+            <button class="row a" type="button" data-sub="3.3_Reasoning_Pipeline" aria-pressed="false"><span class="lab"><b>3.3</b> Reasoning Pipeline</span><span class="track" aria-hidden="true"><u class="abs" style="left:0"></u></span><span class="sc abs"><b data-check="3.3_Reasoning_Pipeline">0</b> Absent</span></button>
+            <button class="row a" type="button" data-sub="3.4_AI_Analytics_Bridge" aria-pressed="true"><span class="lab"><b>3.4</b> AI-Analytics Bridge</span><span class="track" aria-hidden="true"><u class="abs" style="left:0"></u></span><span class="sc abs"><b data-check="3.4_AI_Analytics_Bridge">0</b> Absent</span></button>
+            <button class="row a" type="button" data-sub="3.5_Write_Back_Capability" aria-pressed="false"><span class="lab"><b>3.5</b> Write-Back Capability</span><span class="track" aria-hidden="true"><i style="width:50%"></i><u style="left:50%"></u></span><span class="sc" data-check="3.5_Write_Back_Capability">2</span></button>
+            <button class="row a" type="button" data-sub="3.6_SRL_Detection_Logic" aria-pressed="false"><span class="lab"><b>3.6</b> SRL Detection Logic</span><span class="track" aria-hidden="true"><i style="width:25%"></i><u style="left:25%"></u></span><span class="sc" data-check="3.6_SRL_Detection_Logic">1</span></button>
+            <button class="row a" type="button" data-sub="3.7_Contextual_Adaptation" aria-pressed="false"><span class="lab"><b>3.7</b> Contextual Adaptation</span><span class="track" aria-hidden="true"><i style="width:25%"></i><u style="left:25%"></u></span><span class="sc" data-check="3.7_Contextual_Adaptation">1</span></button>
+            <div class="lvlbar r"><span>L4 &middot; Orchestration</span><span><b data-check="L4.score.banner">5</b>% ready</span></div>
+            <button class="row r" type="button" data-sub="4.1_Agent_Registry" aria-pressed="false"><span class="lab"><b>4.1</b> Agent Registry</span><span class="track" aria-hidden="true"><u class="abs" style="left:0"></u></span><span class="sc abs"><b data-check="4.1_Agent_Registry">0</b> Absent</span></button>
+            <button class="row r" type="button" data-sub="4.2_Shared_State_Store" aria-pressed="false"><span class="lab"><b>4.2</b> Shared State Store</span><span class="track" aria-hidden="true"><u class="abs" style="left:0"></u></span><span class="sc abs"><b data-check="4.2_Shared_State_Store">0</b> Absent</span></button>
+            <button class="row r" type="button" data-sub="4.3_Coordination_Protocol" aria-pressed="false"><span class="lab"><b>4.3</b> Coordination Protocol</span><span class="track" aria-hidden="true"><u class="abs" style="left:0"></u></span><span class="sc abs"><b data-check="4.3_Coordination_Protocol">0</b> Absent</span></button>
+            <button class="row r" type="button" data-sub="4.4_Conflict_Resolution" aria-pressed="false"><span class="lab"><b>4.4</b> Conflict Resolution</span><span class="track" aria-hidden="true"><u class="abs" style="left:0"></u></span><span class="sc abs"><b data-check="4.4_Conflict_Resolution">0</b> Absent</span></button>
+            <button class="row r" type="button" data-sub="4.5_Scalability_Architecture" aria-pressed="false"><span class="lab"><b>4.5</b> Scalability Architecture</span><span class="track" aria-hidden="true"><i style="width:25%"></i><u style="left:25%"></u></span><span class="sc" data-check="4.5_Scalability_Architecture">1</span></button>
+            <div class="lvlbar a"><span>L5 &middot; Intervention Delivery</span><span><b data-check="L5.score.banner">22</b>% ready</span></div>
+            <button class="row a" type="button" data-sub="5.1_Message_Delivery" aria-pressed="false"><span class="lab"><b>5.1</b> Message Delivery</span><span class="track" aria-hidden="true"><i style="width:50%"></i><u style="left:50%"></u></span><span class="sc" data-check="5.1_Message_Delivery">2</span></button>
+            <button class="row a" type="button" data-sub="5.2_UI_Injection" aria-pressed="false"><span class="lab"><b>5.2</b> UI Injection</span><span class="track" aria-hidden="true"><i style="width:25%"></i><u style="left:25%"></u></span><span class="sc" data-check="5.2_UI_Injection">1</span></button>
+            <button class="row a" type="button" data-sub="5.3_Content_Generation" aria-pressed="false"><span class="lab"><b>5.3</b> Content Generation</span><span class="track" aria-hidden="true"><i style="width:50%"></i><u style="left:50%"></u></span><span class="sc" data-check="5.3_Content_Generation">2</span></button>
+            <button class="row a" type="button" data-sub="5.4_Feedback_Loop" aria-pressed="false"><span class="lab"><b>5.4</b> Feedback Loop</span><span class="track" aria-hidden="true"><i style="width:25%"></i><u style="left:25%"></u></span><span class="sc" data-check="5.4_Feedback_Loop">1</span></button>
+            <button class="row a" type="button" data-sub="5.5_Timing_Intelligence" aria-pressed="false"><span class="lab"><b>5.5</b> Timing Intelligence</span><span class="track" aria-hidden="true"><u class="abs" style="left:0"></u></span><span class="sc abs"><b data-check="5.5_Timing_Intelligence">0</b> Absent</span></button>
+          </div>
+        </div>
+        <div class="detail" id="detail" aria-live="polite">
+          <p class="k">L3 Agent Reasoning &middot; check 3.4</p>
+          <h4>AI-Analytics Bridge</h4>
+          <span class="score s0">0 of 4 &middot; Absent &middot; counts as 0</span>
+          <p class="k">What was checked</p>
+          <p>Whether code-level connections exist between the AI subsystem and the analytics or learner-state framework, so that an agent can reason over learner state without each deployment writing a bespoke adapter. This is the paper's central empirical finding: Moodle scores 0 here because the two subsystems share zero imports.</p>
+          <p class="k">What was found in Moodle</p>
+          <p>Zero cross-imports between core_ai (ai/) and core_analytics (analytics/) &middot; verified by grep</p>
+          <p class="k">Rubric anchor</p>
+          <p>Absent (0%): no infrastructure; capability does not exist</p>
+          <p class="k">Grounded in</p>
+          <p>Zimmerman (2002): Self-Regulated Learning; Talebirad and Nadiri (2023): Multi-agent collaboration architecture; Chu et al. (2025, EMNLP): LLM agents for education</p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article class="finding" id="f3" aria-labelledby="f3-h">
+    <div class="txt">
+      <span class="kicker">Finding 3 &middot; the mechanism</span>
+      <h3 id="f3-h">The AI subsystem and the analytics framework share <em>zero</em> code-level imports.</h3>
+      <p>Moodle can generate a language-model response, and Moodle can predict which students are at risk, but no architectural pathway connects the two. Each AI request is a stateless request-response pair with no access to learner context. The gap is bridgeable through the plugin system without touching core: roughly 150 to 200 lines, an estimate from source analysis that remains to be validated.</p>
+      <p class="ref">Paper &sect;5.3, &sect;6.1, &sect;6.2, Figure 5 &middot; <a href="https://github.com/baqarjafri/paper-stair-framework/blob/main/analysis/code/analyze_architecture.py">analyze_architecture.py</a> &middot; <a href="https://github.com/baqarjafri/paper-stair-framework/blob/main/figures/fig7_event_flow.png">Figure 5 as published</a></p>
+    </div>
+    <div class="card">
+      <p class="ct">Two subsystems, no pathway between them</p>
+      <p class="cs">Counts from the analysed source tree (Moodle 5.2dev+, Build 20260320). Hover a line for the file it comes from.</p>
+      <div class="mech">
+        <div class="sys a"><h4>analytics/</h4><p class="t">Sees who is at risk</p><ul>
+          <li title="course/classes/analytics/target/"><b data-check="claims.analytics_targets">8</b> prediction targets, including dropout risk</li>
+          <li title="analytics/classes/">Batch machine-learning pipeline with time-splitting strategies</li>
+          <li title="mdl_analytics_predictions">Predictions written to an internal table</li>
+          <li class="no" title="lib/db/services.php: no analytics prediction endpoint">No web service exposes the predictions</li></ul></div>
+        <div class="gap"><div class="zero" data-check="claims.imports">0</div><p class="z">imports in either direction<br>core_ai &harr; core_analytics<br>verified by source search</p><div class="door"></div><p class="fix">one doorway: pass <code>get_predictions</code> output into the AI action's <code>get_configuration</code> context via a local plugin (about 150 to 200 lines, no core change)</p></div>
+        <div class="sys b"><h4>ai/</h4><p class="t">Can generate a response</p><ul>
+          <li title="ai/provider/"><b data-check="claims.ai_providers">6</b> LLM providers: OpenAI, Azure, Bedrock, Gemini, DeepSeek, Ollama</li>
+          <li title="ai/classes/aiactions/"><b data-check="claims.ai_actions">4</b> action types, each user-initiated</li>
+          <li title="ai/classes/">Rate limiting, audit logging, model selection</li>
+          <li class="no" title="grep: zero references to core_analytics inside ai/">No access to learner state or risk</li></ul></div>
+      </div>
+      <p class="mech-note">Elsewhere in the platform, <b data-check="claims.web_services">402</b> web service functions expose grades, completion, enrolment and competencies to external clients; none exposes a risk prediction. That is why L2 scores 75 on accessibility but 38 on integration.</p>
+    </div>
+  </article>
+
+  <article class="finding" id="f4" aria-labelledby="f4-h">
+    <div class="txt">
+      <span class="kicker">Finding 4 &middot; the instrument</span>
+      <h3 id="f4-h">Five levels, in a strict dependency chain, grounded in three literatures that converge on the same structure.</h3>
+      <p>STAIR (Scaffold for Teaching Agent Integration Readiness) turns "supports AI" into five architectural conditions an autonomous teaching agent needs from its host: sense, remember, reason, coordinate, reach. Each level is where Zimmerman's self-regulated learning cycle, Talebirad and Nadiri's multi-agent architecture, and Chu et al.'s educational LLM-agent taxonomy meet. Any LMS can be scored against it.</p>
+      <p class="ref">Paper &sect;3, Table 1, Figure 2 &middot; <a href="https://github.com/baqarjafri/paper-stair-framework/blob/main/analysis/instruments/STAIR_SCORING_INSTRUMENT.md">STAIR_SCORING_INSTRUMENT.md</a> &middot; <a href="https://github.com/baqarjafri/paper-stair-framework/blob/main/figures/fig1_stair_architecture.png">Figure 2 as published</a></p>
+    </div>
+    <div class="card">
+      <p class="ct">The STAIR ladder, with Moodle's score at each step</p>
+      <p class="cs">Select a level for its architectural requirement and its grounding in the three literatures.</p>
+      <div class="ladder" id="ladder">
+        <div class="step-wrap"><button class="step" type="button" aria-expanded="false" aria-controls="sd-L5"><span class="id">L5 Reach<span>INTERVENTION DELIVERY</span></span><span class="comp">Message delivery &middot; UI injection &middot; Feedback loop</span><span class="sc a" data-check="L5.score.ladder">22</span></button><div class="stepdetail" id="sd-L5" hidden><p><b>Requirement:</b> Platform delivers context-aware, timely agent interventions embedded within the flow of learning activity.</p><div class="chips"><span class="chip z"><b>Zimmerman:</b> Adaptive self-reactions</span><span class="chip t"><b>Talebirad and Nadiri:</b> Delivery mechanism</span><span class="chip h"><b>Chu et al.:</b> Personalisation and real-time adaptation</span></div></div></div>
+        <div class="step-wrap"><button class="step" type="button" aria-expanded="false" aria-controls="sd-L4"><span class="id">L4 Coordinate<span>ORCHESTRATION</span></span><span class="comp">Agent registry &middot; Shared state &middot; Conflict resolution</span><span class="sc r" data-check="L4.score.ladder">5</span></button><div class="stepdetail" id="sd-L4" hidden><p><b>Requirement:</b> Platform coordinates concurrent AI agents sharing student context, with conflict resolution and load management.</p><div class="chips"><span class="chip z"><b>Zimmerman:</b> Metacognitive monitoring</span><span class="chip t"><b>Talebirad and Nadiri:</b> Multi-agent coordination</span><span class="chip h"><b>Chu et al.:</b> Multi-agent communication</span></div></div></div>
+        <div class="step-wrap on"><button class="step" type="button" aria-expanded="true" aria-controls="sd-L3"><span class="id">L3 Reason<span>AGENT REASONING</span></span><span class="comp">AI subsystem &middot; Reasoning pipeline &middot; SRL detection</span><span class="sc a" data-check="L3.score.ladder">25</span></button><div class="stepdetail" id="sd-L3"><p><b>Requirement:</b> Platform supports autonomous AI deliberation over student state, with platform-enforced pedagogical guardrails.</p><div class="chips"><span class="chip z"><b>Zimmerman:</b> Strategic planning</span><span class="chip t"><b>Talebirad and Nadiri:</b> Agent reasoning loop</span><span class="chip h"><b>Chu et al.:</b> Planning and goal decomposition</span></div></div></div>
+        <div class="step-wrap"><button class="step" type="button" aria-expanded="false" aria-controls="sd-L2"><span class="id">L2 Remember<span>STUDENT STATE</span></span><span class="comp">Learner model &middot; Analytics API &middot; Temporal reasoning</span><span class="sc g" data-check="L2.score.ladder">53</span></button><div class="stepdetail" id="sd-L2" hidden><p><b>Requirement:</b> Platform maintains a persistent, queryable model of each learner's cumulative progress, performance, and risk status.</p><div class="chips"><span class="chip z"><b>Zimmerman:</b> Self-judgment</span><span class="chip t"><b>Talebirad and Nadiri:</b> Knowledge representation</span><span class="chip h"><b>Chu et al.:</b> Memory (short and long-term)</span></div></div></div>
+        <div class="step-wrap"><button class="step" type="button" aria-expanded="false" aria-controls="sd-L1"><span class="id">L1 Sense<span>EVENT SENSING</span></span><span class="comp">Event broker &middot; Real-time stream &middot; Pedagogical event schema</span><span class="sc g" data-check="L1.score.ladder">55</span></button><div class="stepdetail" id="sd-L1" hidden><p><b>Requirement:</b> Platform emits structured, pedagogically classified learner events accessible to AI consumers.</p><div class="chips"><span class="chip z"><b>Zimmerman:</b> Self-observation</span><span class="chip t"><b>Talebirad and Nadiri:</b> Event sensing layer</span><span class="chip h"><b>Chu et al.:</b> Contextual input</span></div></div></div>
+      </div>
+      <p class="hintline">Each level depends on the one below it: a platform that fails at L1 cannot support L2, because agents have no perceptual input.</p>
+    </div>
+  </article>
+</div></section>
+
+<section class="method" id="method" aria-labelledby="method-h"><div class="wrap"><div class="g">
+  <div>
+    <h2 id="method-h">How it was measured</h2>
+    <p class="muted" style="font-size:14.5px">Design science research: the instrument was derived from theory, then applied to Moodle's open source tree by structured source-code analysis. Every score points at a file.</p>
+    <div class="pipe">
+      <div class="pstep"><i>STEP 1</i><b>28 checks, scored 0 to 4</b>Absent, nascent, partial, substantial, ready. A zero requires a source search that proves absence.</div>
+      <div class="pstep"><i>STEP 2</i><b>Evidence hierarchy</b>Source code outranks API documentation, which outranks runtime behaviour, which outranks documentation.</div>
+      <div class="pstep"><i>STEP 3</i><b>Five dimensions per level</b>Equal-weight consolidation into coverage, accessibility, educational specificity, temporal availability, integration.</div>
+      <div class="pstep"><i>STEP 4</i><b>Level readiness</b>Mean of the five dimensions: 55 / 53 / 25 / 5 / 22. Provenance and weights published.</div>
+    </div>
+  </div>
+  <div>
+    <h2>Reproduce every number</h2>
+    <pre>git clone https://github.com/baqarjafri/paper-stair-framework
+cd paper-stair-framework
+python reproduce.py
+<span class="c"># fetches the pinned Moodle commit, re-scores, compares</span>
+<span class="ok"><b data-check="claims.total">13</b> matched, 0 drifted, 13 total.</span></pre>
+    <p class="muted" style="font-size:13.5px;margin-top:10px">Pinned commit, rubric, definitions and per-cell provenance are in the repository. Code MIT; paper and figures CC BY 4.0.</p>
+  </div>
+</div></div></section>
+
+<section class="limits" id="limits" aria-labelledby="lim-h"><div class="wrap"><div class="g">
+  <div><h2 id="lim-h">Limitations</h2>
+    <ul><li>Dimensional structure derived from theoretical convergence, not empirical factor analysis; other weightings could shift level scores.</li><li>Single rater, no inter-rater reliability yet; the instrument is built for replication.</li><li>One platform at one point in time; patterns may not transfer to other technology stacks.</li><li>Source code, not runtime: STAIR measures structural readiness, not operational readiness.</li></ul></div>
+  <div><h2>Next steps</h2>
+    <ul><li>Multi-platform evaluation: Open edX and Canvas LMS first, to test whether the cliff generalises and to produce inter-rater data.</li><li>Longitudinal re-evaluation of Moodle as its AI subsystem matures.</li><li>Sensitivity analysis of the uniform dimension weights once multi-platform data exist.</li></ul></div>
+</div></div></section>
+
+<section class="cite" id="cite" aria-labelledby="cite-h"><div class="wrap"><div class="g">
+  <div><h2 id="cite-h">Cite</h2>
+    <p>Jafri, B. (2026). STAIR: A Five-Level Framework for Evaluating LMS Readiness for Agentic AI Teaching Agents. In <i>Proceedings of AITHE 2026, Artificial Intelligence and the Transformation of Higher Education Symposium</i>, Swansea, UK. SSRN 7134838.</p>
+    <p>Slides: Jafri, B. (2026). STAIR Presentation. Zenodo. <a href="https://doi.org/10.5281/zenodo.21429295">doi:10.5281/zenodo.21429295</a></p>
+    <p>Machine-readable: <a href="https://github.com/baqarjafri/paper-stair-framework/blob/main/CITATION.cff">CITATION.cff</a> in the repository.</p></div>
+  <div>
+    <div class="bib-head"><span class="kicker">BibTeX</span><button class="btn" type="button" id="copy-bib">Copy BibTeX</button></div>
+    <pre id="bibtex" tabindex="0">@inproceedings{jafri2026stair,
+  title     = {{STAIR}: A Five-Level Framework for Evaluating
+               {LMS} Readiness for Agentic {AI} Teaching Agents},
+  author    = {Jafri, Baqar},
+  booktitle = {Proceedings of AITHE 2026, Artificial Intelligence
+               and the Transformation of Higher Education Symposium},
+  address   = {Swansea, United Kingdom},
+  year      = {2026},
+  month     = jul,
+  url       = {https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7134838},
+  note      = {Code and data: https://github.com/baqarjafri/paper-stair-framework}
+}</pre>
+  </div>
+</div></div></section>
+
+</main>
+
+<footer><div class="wrap">
+  <div><b>Baqar Jafri</b> &middot; University of Stirling, Computing Science and Mathematics &middot; <a href="mailto:baqar@nexgenclass.com">baqar@nexgenclass.com</a> &middot; <a href="https://orcid.org/0009-0007-3204-0460">ORCID 0009-0007-3204-0460</a></div>
+  <div style="text-align:right">Paper and figures CC BY 4.0 &middot; Code MIT<br>Moodle source GPL v3+, cloned on demand, never redistributed</div>
+</div></footer>
+
+</body>
+</html>

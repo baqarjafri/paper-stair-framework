@@ -6,6 +6,9 @@
 **Author:** Baqar Jafri, University of Stirling
 **Contact:** baqar@nexgenclass.com
 **License:** MIT (code) · CC-BY-4.0 (paper and figures)
+**Paper page:** https://baqarjafri.github.io/paper-stair-framework/ (talk video, interactive findings, slides)
+**Paper on SSRN:** https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7134838
+**Slides on Zenodo:** https://doi.org/10.5281/zenodo.21429295
 
 ---
 
